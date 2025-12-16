@@ -449,9 +449,28 @@
       transform: translateY(2px);
       box-shadow: 0 4px 12px rgba(139,128,107,.3);
     }
+
+    /* DEBUG */
+    #debugLog {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.9);
+      color: #0f0;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 99999;
+      display: none;
+    }
   </style>
 </head>
 <body>
+  <div id="debugLog"></div>
+  
   <div class="container">
     <div class="header">
       <h1>КЕНЛИТ АВТО</h1>
@@ -629,6 +648,18 @@
   </div>
 
   <script>
+    // DEBUG LOGGER
+    const debugLog = document.getElementById('debugLog');
+    debugLog.style.display = 'block';
+    
+    function log(msg) {
+      console.log(msg);
+      debugLog.innerHTML += msg + '<br>';
+      debugLog.scrollTop = debugLog.scrollHeight;
+    }
+
+    log('🚀 Скрипт запущен');
+
     // БЕЛЫЕ СНЕЖИНКИ
     function createSnowflake() {
       const snowflake = document.createElement('div');
@@ -654,12 +685,18 @@
     }
 
     // TELEGRAM WEBAPP
+    log('📱 Инициализация Telegram WebApp...');
     let tg = window.Telegram.WebApp;
+    log('✅ Telegram объект: ' + (tg ? 'Найден' : 'НЕ НАЙДЕН'));
+    
+    tg.ready();
     tg.expand();
+    log('✅ expand() вызван');
     
     // Включаем главную кнопку Telegram
-    tg.MainButton.setText('Отправить данные');
+    tg.MainButton.setText('ОТПРАВИТЬ ДАННЫЕ');
     tg.MainButton.show();
+    log('✅ MainButton показана');
 
     const RATES = {1: 0, 2: 5, 3: 10, 4: 15, 5: 20, 6: 25};
     const basePriceInput = document.getElementById('base_price');
@@ -676,6 +713,7 @@
         discountBox.classList.remove('active');
       }
       calculate();
+      log('🎄 Скидка: ' + (hasDiscount ? 'ВКЛЮЧЕНА' : 'выключена'));
     });
 
     function calculate() {
@@ -736,6 +774,8 @@
 
     // ОТПРАВКА ДАННЫХ
     function sendData() {
+      log('🔄 Функция sendData() вызвана');
+      
       const fio = document.getElementById('fio').value.trim();
       const passport = document.getElementById('passport').value.trim();
       const address = document.getElementById('address').value.trim();
@@ -745,23 +785,30 @@
       const year = document.getElementById('year').value.trim();
       const color = document.getElementById('color').value.trim();
 
+      log('📝 ФИО: ' + fio);
+      log('📝 Авто: ' + auto);
+
       // Проверка полей
       if (!fio || !passport || !address || !phone || !auto || !vin || !year || !color) {
+        log('❌ Не заполнены обязательные поля!');
         tg.showAlert('❌ Заполните все обязательные поля!');
         return;
       }
 
       if (!/^[А-Яа-яЁё\s]+$/.test(fio)) {
+        log('❌ ФИО содержит недопустимые символы');
         tg.showAlert('❌ ФИО должно содержать только русские буквы!');
         return;
       }
 
       if (!/^\d{3}-\d{3}$/.test(phone)) {
+        log('❌ Неверный формат телефона');
         tg.showAlert('❌ Телефон должен быть в формате 333-333!');
         return;
       }
 
       if (vin.length !== 17) {
+        log('❌ VIN должен быть 17 символов');
         tg.showAlert('❌ VIN номер должен содержать 17 символов!');
         return;
       }
@@ -782,22 +829,35 @@
         ...calculations
       };
 
-      console.log('📤 Отправка данных:', data);
+      const jsonData = JSON.stringify(data);
+      log('📦 JSON данные подготовлены:');
+      log(jsonData.substring(0, 100) + '...');
       
       // Отправка через Telegram WebApp
-      tg.sendData(JSON.stringify(data));
+      try {
+        log('📤 Вызов tg.sendData()...');
+        tg.sendData(jsonData);
+        log('✅ tg.sendData() вызван успешно!');
+      } catch(e) {
+        log('❌ ОШИБКА при tg.sendData(): ' + e.message);
+      }
     }
 
     // Обработка кнопки формы
     document.getElementById('contractForm').addEventListener('submit', function(e) {
       e.preventDefault();
+      log('🔵 Submit формы перехвачен');
       sendData();
     });
 
     // Обработка главной кнопки Telegram
-    tg.MainButton.onClick(sendData);
+    tg.MainButton.onClick(function() {
+      log('🔵 MainButton нажата');
+      sendData();
+    });
 
     calculate();
+    log('✅ Инициализация завершена');
   </script>
 </body>
 </html>
