@@ -18,7 +18,7 @@
       overflow-x: hidden;
     }
 
-    /* АНИМАЦИЯ ПАДАЮЩЕГО СНЕГА */
+    /* МЕДЛЕННЫЕ СНЕЖИНКИ */
     .snowflake {
       position: fixed;
       top: -10px;
@@ -28,17 +28,17 @@
       animation-name: snowfall;
       animation-timing-function: linear;
       animation-iteration-count: infinite;
-      opacity: 0.8;
+      opacity: 0.6;
     }
 
     @keyframes snowfall {
       0% {
         transform: translateY(0vh) rotate(0deg);
-        opacity: 1;
+        opacity: 0.8;
       }
       100% {
         transform: translateY(100vh) rotate(360deg);
-        opacity: 0.3;
+        opacity: 0.2;
       }
     }
 
@@ -256,7 +256,7 @@
       box-shadow: 0 2px 12px rgba(139,128,107,.2);
     }
 
-    /* КОМПАКТНАЯ КРАСНАЯ СКИДКА БЕЗ ЧЕКБОКСА */
+    /* КОМПАКТНАЯ КРАСНАЯ СКИДКА */
     .discount-box {
       background: linear-gradient(135deg, rgba(100,40,40,.85) 0%, rgba(80,30,30,.9) 100%);
       border: 2px solid rgba(150,60,60,.4);
@@ -270,7 +270,6 @@
       box-shadow: 0 4px 16px rgba(100,40,40,.3);
       transition: all .3s;
       position: relative;
-      overflow: hidden;
     }
 
     .discount-box.active {
@@ -289,8 +288,6 @@
       font-weight: 700;
       color: #fff;
       text-shadow: 0 2px 4px rgba(0,0,0,.3);
-      position: relative;
-      z-index: 1;
     }
 
     .discount-badge {
@@ -300,8 +297,6 @@
       font-size: 18px;
       font-weight: 800;
       color: #fff;
-      position: relative;
-      z-index: 1;
       text-shadow: 0 2px 4px rgba(0,0,0,.3);
     }
 
@@ -455,7 +450,7 @@
 
     <form id="contractForm">
       <!-- Тип договора -->
-      <div class="section-label">❄️ Тип договора</div>
+      <div class="section-label">Тип договора</div>
       <div class="type-grid">
         <div class="type-option">
           <input type="radio" name="contract_type" value="Купли-продажи" id="type1" checked>
@@ -563,15 +558,15 @@
         </div>
       </div>
 
-      <!-- Новогодняя скидка (КОМПАКТНАЯ БЕЗ ЧЕКБОКСА) -->
-      <div class="section-label">❄️ НОВОГОДНЯЯ СКИДКА 26%</div>
+      <!-- Новогодняя скидка -->
+      <div class="section-label">НОВОГОДНЯЯ СКИДКА 26%</div>
       <div class="discount-box" id="discountBox">
         <span class="discount-text">🎄 -26% НОВОГОДНЯЯ СКИДКА 🎅</span>
         <span class="discount-badge">-26%</span>
       </div>
 
       <!-- Срок рассрочки -->
-      <div class="section-label">❄️ Срок рассрочки</div>
+      <div class="section-label">Срок рассрочки</div>
       <div class="weeks-grid">
         <div class="week-option">
           <input type="radio" name="weeks" value="1" id="week1" checked>
@@ -638,28 +633,28 @@
   </div>
 
   <script>
-    // АНИМАЦИЯ ПАДАЮЩЕГО СНЕГА
+    // МЕДЛЕННЫЕ СНЕЖИНКИ (меньше количество)
     function createSnowflake() {
       const snowflake = document.createElement('div');
       snowflake.classList.add('snowflake');
       snowflake.innerHTML = '❄';
       snowflake.style.left = Math.random() * 100 + '%';
-      snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
-      snowflake.style.animationDuration = (Math.random() * 3 + 5) + 's';
-      snowflake.style.animationDelay = Math.random() * 5 + 's';
+      snowflake.style.fontSize = (Math.random() * 8 + 12) + 'px';
+      snowflake.style.animationDuration = (Math.random() * 5 + 10) + 's'; // 10-15 секунд
+      snowflake.style.animationDelay = Math.random() * 3 + 's';
       document.body.appendChild(snowflake);
 
       setTimeout(() => {
         snowflake.remove();
-      }, 10000);
+      }, 18000);
     }
 
-    setInterval(createSnowflake, 300);
-    for (let i = 0; i < 15; i++) {
-      setTimeout(createSnowflake, i * 200);
+    // Меньше снежинок и реже создаются
+    setInterval(createSnowflake, 800);
+    for (let i = 0; i < 8; i++) {
+      setTimeout(createSnowflake, i * 300);
     }
 
-    // TELEGRAM
     let tg = window.Telegram.WebApp;
     tg.expand();
 
@@ -671,7 +666,6 @@
     const discountBox = document.getElementById('discountBox');
     let hasDiscount = false;
 
-    // КЛИК ПО СКИДКЕ - ПОДСВЕТКА
     discountBox.addEventListener('click', function() {
       hasDiscount = !hasDiscount;
       if (hasDiscount) {
