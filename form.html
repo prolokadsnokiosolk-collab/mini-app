@@ -627,6 +627,9 @@
       snowflake.style.fontSize = (Math.random() * 8 + 12) + 'px';
       snowflake.style.animationDuration = (Math.random() * 5 + 10) + 's';
       snowflake.style.animationDelay = Math.random() * 3 + 's';
+      snowflake.style.color = '#ffffff'; // ЯВНО БЕЛЫЙ
+      snowflake.style.textShadow = '0 0 5px rgba(255,255,255,0.5)'; // СВЕЧЕНИЕ
+      snowflake.style.filter = 'brightness(2)'; // ЯРКОСТЬ
       document.body.appendChild(snowflake);
 
       setTimeout(() => {
@@ -769,5 +772,6 @@
 
     calculate();
   </script>
+
 </body>
 </html>
