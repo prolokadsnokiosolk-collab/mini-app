@@ -190,7 +190,6 @@
       outline: none;
     }
 
-    /* Убираем стрелки у input type="number" */
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button {
       -webkit-appearance: none;
@@ -450,7 +449,6 @@
       box-shadow: 0 4px 12px rgba(139,128,107,.3);
     }
 
-    /* DEBUG */
     #debugLog {
       position: fixed;
       bottom: 0;
@@ -464,7 +462,7 @@
       max-height: 200px;
       overflow-y: auto;
       z-index: 99999;
-      display: none;
+      display: block;
     }
   </style>
 </head>
@@ -648,9 +646,7 @@
   </div>
 
   <script>
-    // DEBUG LOGGER
     const debugLog = document.getElementById('debugLog');
-    debugLog.style.display = 'block';
     
     function log(msg) {
       console.log(msg);
@@ -693,11 +689,6 @@
     tg.expand();
     log('✅ expand() вызван');
     
-    // Включаем главную кнопку Telegram
-    tg.MainButton.setText('ОТПРАВИТЬ ДАННЫЕ');
-    tg.MainButton.show();
-    log('✅ MainButton показана');
-
     const RATES = {1: 0, 2: 5, 3: 10, 4: 15, 5: 20, 6: 25};
     const basePriceInput = document.getElementById('base_price');
     const akppInputs = document.querySelectorAll('input[name="akpp_price"]');
@@ -788,28 +779,27 @@
       log('📝 ФИО: ' + fio);
       log('📝 Авто: ' + auto);
 
-      // Проверка полей
       if (!fio || !passport || !address || !phone || !auto || !vin || !year || !color) {
         log('❌ Не заполнены обязательные поля!');
-        tg.showAlert('❌ Заполните все обязательные поля!');
+        alert('❌ Заполните все обязательные поля!');
         return;
       }
 
       if (!/^[А-Яа-яЁё\s]+$/.test(fio)) {
         log('❌ ФИО содержит недопустимые символы');
-        tg.showAlert('❌ ФИО должно содержать только русские буквы!');
+        alert('❌ ФИО должно содержать только русские буквы!');
         return;
       }
 
       if (!/^\d{3}-\d{3}$/.test(phone)) {
         log('❌ Неверный формат телефона');
-        tg.showAlert('❌ Телефон должен быть в формате 333-333!');
+        alert('❌ Телефон должен быть в формате 333-333!');
         return;
       }
 
       if (vin.length !== 17) {
         log('❌ VIN должен быть 17 символов');
-        tg.showAlert('❌ VIN номер должен содержать 17 символов!');
+        alert('❌ VIN номер должен содержать 17 символов!');
         return;
       }
 
@@ -833,7 +823,6 @@
       log('📦 JSON данные подготовлены:');
       log(jsonData.substring(0, 100) + '...');
       
-      // Отправка через Telegram WebApp
       try {
         log('📤 Вызов tg.sendData()...');
         tg.sendData(jsonData);
@@ -843,16 +832,9 @@
       }
     }
 
-    // Обработка кнопки формы
     document.getElementById('contractForm').addEventListener('submit', function(e) {
       e.preventDefault();
       log('🔵 Submit формы перехвачен');
-      sendData();
-    });
-
-    // Обработка главной кнопки Telegram
-    tg.MainButton.onClick(function() {
-      log('🔵 MainButton нажата');
       sendData();
     });
 
