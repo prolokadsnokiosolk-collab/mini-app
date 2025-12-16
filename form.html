@@ -29,7 +29,6 @@
       animation-timing-function: linear;
       animation-iteration-count: infinite;
       opacity: 0.6;
-      color: #ffffff; /* БЕЛЫЙ ЦВЕТ */
     }
 
     @keyframes snowfall {
@@ -189,6 +188,17 @@
       font-family: 'Montserrat', sans-serif;
       transition: all .3s;
       outline: none;
+    }
+
+    /* Убираем стрелки у input type="number" */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
     }
 
     .input-group textarea {
@@ -619,6 +629,7 @@
   </div>
 
   <script>
+    // БЕЛЫЕ СНЕЖИНКИ
     function createSnowflake() {
       const snowflake = document.createElement('div');
       snowflake.classList.add('snowflake');
@@ -627,9 +638,9 @@
       snowflake.style.fontSize = (Math.random() * 8 + 12) + 'px';
       snowflake.style.animationDuration = (Math.random() * 5 + 10) + 's';
       snowflake.style.animationDelay = Math.random() * 3 + 's';
-      snowflake.style.color = '#ffffff'; // ЯВНО БЕЛЫЙ
-      snowflake.style.textShadow = '0 0 5px rgba(255,255,255,0.5)'; // СВЕЧЕНИЕ
-      snowflake.style.filter = 'brightness(2)'; // ЯРКОСТЬ
+      snowflake.style.color = '#ffffff';
+      snowflake.style.textShadow = '0 0 5px rgba(255,255,255,0.5)';
+      snowflake.style.filter = 'brightness(2)';
       document.body.appendChild(snowflake);
 
       setTimeout(() => {
@@ -772,6 +783,5 @@
 
     calculate();
   </script>
-
 </body>
 </html>
