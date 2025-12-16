@@ -7,9 +7,9 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
-
+    
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
+    
     body {
       font-family: 'Montserrat', -apple-system, sans-serif;
       background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 50%, #0d0d0d 100%);
@@ -19,7 +19,7 @@
       justify-content: center;
       padding: 20px;
     }
-
+    
     .screen {
       text-align: center;
       max-width: 400px;
@@ -29,9 +29,9 @@
       border: 1px solid rgba(218,197,164,.2);
       backdrop-filter: blur(10px);
     }
-
+    
     .icon { font-size: 64px; margin-bottom: 20px; }
-
+    
     .title {
       font-size: 24px;
       font-weight: 700;
@@ -40,13 +40,13 @@
       text-transform: uppercase;
       letter-spacing: 2px;
     }
-
+    
     .text {
       font-size: 14px;
       color: rgba(218,197,164,.7);
       line-height: 1.6;
     }
-
+    
     .loading {
       display: inline-block;
       width: 20px;
@@ -57,9 +57,17 @@
       animation: spin 1s linear infinite;
       margin-left: 10px;
     }
-
+    
     @keyframes spin {
       to { transform: rotate(360deg); }
+    }
+    
+    small {
+      display: block;
+      margin-top: 10px;
+      font-size: 10px;
+      opacity: 0.5;
+      word-break: break-all;
     }
   </style>
 </head>
@@ -71,53 +79,76 @@
       Проверка доступа<span class="loading"></span>
     </div>
   </div>
-
+  
   <script>
     const tg = window.Telegram.WebApp;
+    
+    console.log('[INIT] Запуск приложения...');
+    
+    // Инициализируем Telegram WebApp
     tg.ready();
     tg.expand();
     tg.setHeaderColor('#1a1a1a');
     tg.setBackgroundColor('#1a1a1a');
-
-    // Получаем данные от Telegram
-    const initData = tg.initDataUnsafe;
-
-    console.log('[AUTH] Проверка авторизации...');
-    console.log('[AUTH] initData:', initData);
-
-    // Проверяем, запущено ли через Telegram
-    if (!initData || !initData.user) {
-      // НЕ через Telegram - доступ запрещён
-      console.log('[AUTH] ❌ Открыто НЕ через Telegram');
-
-      document.getElementById('content').innerHTML = \`
-        <div class="screen">
-          <div class="icon">🔒</div>
-          <div class="title">Доступ запрещён</div>
-          <div class="text">
-            Это мини-приложение доступно только через Telegram бота.<br><br>
-            Откройте бота и нажмите /start
-          </div>
-        </div>
-      \`;
-
-      // Не закрываем, просто показываем ошибку
-    } else {
-      // Запущено через Telegram
-      const userId = initData.user.id;
-      const userName = initData.user.first_name || 'Пользователь';
-
-      console.log('[AUTH] ✅ Авторизовано через Telegram');
-      console.log('[AUTH] User ID:', userId);
-      console.log('[AUTH] User Name:', userName);
-
-      // Сохраняем user_id в sessionStorage для использования в форме
-      sessionStorage.setItem('tg_user_id', userId);
-      sessionStorage.setItem('tg_user_name', userName);
-
-      // Перенаправляем на форму
-      window.location.href = 'form.html';
-    }
+    
+    console.log('[INIT] Telegram WebApp инициализирован');
+    
+    // ВАЖНО: Ждём 500мс чтобы initData успел загрузиться
+    setTimeout(function() {
+        console.log('[AUTH] Начинаем проверку авторизации...');
+        
+        const initData = tg.initDataUnsafe;
+        
+        console.log('[AUTH] initDataUnsafe:', JSON.stringify(initData));
+        
+        // Проверяем, есть ли данные пользователя
+        if (initData && initData.user && initData.user.id) {
+            // ✅ Запущено через Telegram
+            const userId = initData.user.id;
+            const userName = initData.user.first_name || 'Пользователь';
+            
+            console.log('[AUTH] ✅ Успех! User ID:', userId, 'Name:', userName);
+            
+            // Сохраняем данные
+            sessionStorage.setItem('tg_user_id', userId);
+            sessionStorage.setItem('tg_user_name', userName);
+            
+            // Показываем сообщение перед редиректом
+            document.getElementById('content').innerHTML = `
+                <div class="screen">
+                    <div class="icon">✅</div>
+                    <div class="title">Авторизация успешна</div>
+                    <div class="text">
+                        Перенаправление на форму...<br>
+                        User ID: ${userId}
+                    </div>
+                </div>
+            `;
+            
+            // Перенаправляем через 500мс
+            setTimeout(function() {
+                console.log('[AUTH] Редирект на form.html');
+                window.location.href = 'form.html';
+            }, 500);
+            
+        } else {
+            // ❌ НЕ через Telegram
+            console.log('[AUTH] ❌ Ошибка: initData пустой или нет user');
+            console.log('[AUTH] initData:', initData);
+            
+            document.getElementById('content').innerHTML = `
+                <div class="screen">
+                    <div class="icon">🔒</div>
+                    <div class="title">Доступ запрещён</div>
+                    <div class="text">
+                        Мини-приложение доступно только через Telegram бота.<br><br>
+                        Откройте бота и нажмите /start<br><br>
+                        <small>Debug: initData = ${JSON.stringify(initData)}</small>
+                    </div>
+                </div>
+            `;
+        }
+    }, 500); // Задержка 500мс
   </script>
 </body>
 </html>
