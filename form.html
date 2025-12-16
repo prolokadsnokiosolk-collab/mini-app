@@ -653,8 +653,13 @@
       setTimeout(createSnowflake, i * 300);
     }
 
+    // TELEGRAM WEBAPP
     let tg = window.Telegram.WebApp;
     tg.expand();
+    
+    // Включаем главную кнопку Telegram
+    tg.MainButton.setText('Отправить данные');
+    tg.MainButton.show();
 
     const RATES = {1: 0, 2: 5, 3: 10, 4: 15, 5: 20, 6: 25};
     const basePriceInput = document.getElementById('base_price');
@@ -729,9 +734,8 @@
     akppInputs.forEach(input => input.addEventListener('change', calculate));
     weeksInputs.forEach(input => input.addEventListener('change', calculate));
 
-    document.getElementById('contractForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
+    // ОТПРАВКА ДАННЫХ
+    function sendData() {
       const fio = document.getElementById('fio').value.trim();
       const passport = document.getElementById('passport').value.trim();
       const address = document.getElementById('address').value.trim();
@@ -741,6 +745,7 @@
       const year = document.getElementById('year').value.trim();
       const color = document.getElementById('color').value.trim();
 
+      // Проверка полей
       if (!fio || !passport || !address || !phone || !auto || !vin || !year || !color) {
         tg.showAlert('❌ Заполните все обязательные поля!');
         return;
@@ -777,9 +782,20 @@
         ...calculations
       };
 
-      console.log('Отправка данных:', data);
+      console.log('📤 Отправка данных:', data);
+      
+      // Отправка через Telegram WebApp
       tg.sendData(JSON.stringify(data));
+    }
+
+    // Обработка кнопки формы
+    document.getElementById('contractForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      sendData();
     });
+
+    // Обработка главной кнопки Telegram
+    tg.MainButton.onClick(sendData);
 
     calculate();
   </script>
