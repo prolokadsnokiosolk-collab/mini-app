@@ -1,546 +1,756 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>КЕНЛИТ АВТО</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>КЕНЛИТ АВТО</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(180deg, #6B8DD6 0%, #8E37D7 100%);
-            padding: 0;
-            min-height: 100vh;
-            color: #333;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .container {
-            background: white;
-            border-radius: 24px 24px 0 0;
-            margin-top: 20px;
-            padding: 24px 20px;
-            min-height: calc(100vh - 20px);
-        }
+    body {
+      font-family: 'Montserrat', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 50%, #0d0d0d 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
 
-        .header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px 20px 120px;
+      position: relative;
+      z-index: 1;
+    }
 
-        .header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: #000;
-            margin-bottom: 4px;
-        }
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding: 32px 20px 24px;
+      background: linear-gradient(135deg, rgba(139,128,107,.15) 0%, rgba(95,87,73,.1) 100%);
+      border-radius: 24px;
+      position: relative;
+      box-shadow: 0 8px 32px rgba(0,0,0,.3);
+    }
 
-        .header p {
-            font-size: 15px;
-            color: #8E8E93;
-        }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 24px;
+      padding: 2px;
+      background: linear-gradient(135deg, rgba(139,128,107,.3), rgba(95,87,73,.2));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+    }
 
-        .section-title {
-            font-size: 15px;
-            font-weight: 600;
-            color: #000;
-            margin: 20px 0 12px 0;
-        }
+    .logo { font-size: 48px; margin-bottom: 12px; }
 
-        .btn-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-bottom: 16px;
-        }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #8B806B 0%, #5F5749 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
 
-        .btn-grid.col-4 {
-            grid-template-columns: repeat(2, 1fr);
-        }
+    .header p {
+      color: rgba(139,128,107,.8);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
 
-        .option-btn {
-            position: relative;
-        }
+    .section-label {
+      color: rgba(139,128,107,.9);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin: 28px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-        .option-btn input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-        }
+    .section-label::before {
+      content: '';
+      width: 3px;
+      height: 16px;
+      background: linear-gradient(180deg, #8B806B, #5F5749);
+      border-radius: 2px;
+    }
 
-        .option-btn label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px 12px;
-            background: #F2F2F7;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 500;
-            color: #000;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid transparent;
-            text-align: center;
-        }
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
 
-        .option-btn input[type="radio"]:checked + label {
-            background: #007AFF;
-            color: white;
-            border-color: #007AFF;
-        }
+    .type-option {
+      position: relative;
+    }
 
-        .form-field {
-            margin-bottom: 16px;
-        }
+    .type-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
 
-        .form-field label {
-            display: block;
-            font-size: 15px;
-            font-weight: 600;
-            color: #000;
-            margin-bottom: 8px;
-        }
+    .type-option label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 20px 16px;
+      background: rgba(139,128,107,.08);
+      border: 2px solid rgba(139,128,107,.2);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all .3s cubic-bezier(.4,0,.2,1);
+      min-height: 90px;
+    }
 
-        .form-field input[type="text"],
-        .form-field input[type="number"],
-        .form-field textarea {
-            width: 100%;
-            padding: 14px 16px;
-            background: #F2F2F7;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            color: #000;
-            outline: none;
-        }
+    .type-option label .icon {
+      font-size: 28px;
+      filter: grayscale(1) opacity(.7);
+      transition: all .3s;
+    }
 
-        .form-field textarea {
-            min-height: 80px;
-            resize: vertical;
-            font-family: inherit;
-        }
+    .type-option label .text {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(139,128,107,.7);
+      transition: all .3s;
+    }
 
-        .form-field input::placeholder,
-        .form-field textarea::placeholder {
-            color: #8E8E93;
-        }
+    .type-option input:checked + label {
+      background: linear-gradient(135deg, rgba(139,128,107,.15), rgba(95,87,73,.1));
+      border-color: #8B806B;
+      box-shadow: 0 4px 16px rgba(139,128,107,.2);
+    }
 
-        .form-field small {
-            display: block;
-            font-size: 13px;
-            color: #8E8E93;
-            margin-top: 4px;
-        }
+    .type-option input:checked + label .icon {
+      filter: grayscale(0) opacity(1);
+      transform: scale(1.1);
+    }
 
-        .akpp-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 16px;
-        }
+    .type-option input:checked + label .text {
+      color: #8B806B;
+    }
 
-        .weeks-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 16px;
-        }
+    .input-group {
+      margin-bottom: 20px;
+    }
 
-        .discount-box {
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            border-radius: 12px;
-            padding: 16px;
-            margin: 16px 0;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
+    .input-group label {
+      display: block;
+      color: rgba(139,128,107,.9);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      letter-spacing: .5px;
+    }
 
-        .discount-box input[type="checkbox"] {
-            width: 24px;
-            height: 24px;
-            margin-right: 12px;
-            cursor: pointer;
-        }
+    .input-group input,
+    .input-group textarea {
+      width: 100%;
+      padding: 16px 18px;
+      background: rgba(139,128,107,.08);
+      border: 2px solid rgba(139,128,107,.15);
+      border-radius: 14px;
+      color: rgba(139,128,107,.95);
+      font-size: 15px;
+      font-weight: 500;
+      font-family: 'Montserrat', sans-serif;
+      transition: all .3s;
+      outline: none;
+    }
 
-        .discount-box label {
-            font-size: 16px;
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
-            flex: 1;
-        }
+    .input-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
 
-        .rate-badge {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            padding: 8px 16px;
-            text-align: center;
-            margin-top: 8px;
-            font-weight: 600;
-            color: #007AFF;
-        }
+    .input-group input:focus,
+    .input-group textarea:focus {
+      border-color: #8B806B;
+      background: rgba(139,128,107,.12);
+      box-shadow: 0 0 0 4px rgba(139,128,107,.1);
+    }
 
-        .calc-box {
-            background: #F2F2F7;
-            border-radius: 16px;
-            padding: 16px;
-            margin: 20px 0;
-        }
+    .input-group input::placeholder,
+    .input-group textarea::placeholder {
+      color: rgba(139,128,107,.4);
+    }
 
-        .calc-box h3 {
-            font-size: 17px;
-            font-weight: 600;
-            color: #000;
-            margin-bottom: 12px;
-        }
+    .input-group small {
+      display: block;
+      margin-top: 6px;
+      font-size: 11px;
+      color: rgba(139,128,107,.6);
+      font-weight: 500;
+    }
 
-        .calc-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
+    .akpp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
 
-        .calc-row:last-child {
-            border-bottom: none;
-            padding-top: 12px;
-            font-weight: 700;
-            font-size: 17px;
-            color: #007AFF;
-        }
+    .akpp-option {
+      position: relative;
+    }
 
-        .calc-row.discount-row {
-            color: #34C759;
-            font-weight: 600;
-        }
+    .akpp-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
 
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
-            color: white;
-            border: none;
-            border-radius: 14px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 24px 0;
-            box-shadow: 0 4px 16px rgba(0, 122, 255, 0.3);
-        }
+    .akpp-option label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 12px;
+      background: rgba(139,128,107,.08);
+      border: 2px solid rgba(139,128,107,.2);
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(139,128,107,.7);
+      cursor: pointer;
+      transition: all .3s;
+      text-align: center;
+      min-height: 56px;
+    }
 
-        .submit-btn:active {
-            transform: scale(0.98);
-        }
-    </style>
+    .akpp-option input:checked + label {
+      background: linear-gradient(135deg, rgba(139,128,107,.2), rgba(95,87,73,.15));
+      border-color: #8B806B;
+      color: #8B806B;
+      box-shadow: 0 2px 12px rgba(139,128,107,.2);
+    }
+
+    .discount-box {
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      border-radius: 18px;
+      padding: 20px 24px;
+      margin: 28px 0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(255,215,0,.3);
+      transition: transform .2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .discount-box::before {
+      content: '✨';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      opacity: .3;
+    }
+
+    .discount-box:active {
+      transform: scale(.98);
+    }
+
+    .discount-box input[type="checkbox"] {
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      accent-color: #fff;
+    }
+
+    .discount-box label {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      flex: 1;
+      text-shadow: 0 2px 4px rgba(0,0,0,.1);
+    }
+
+    .discount-badge {
+      background: rgba(255,255,255,.3);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .weeks-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .week-option {
+      position: relative;
+    }
+
+    .week-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .week-option label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 12px;
+      background: rgba(139,128,107,.08);
+      border: 2px solid rgba(139,128,107,.2);
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(139,128,107,.7);
+      cursor: pointer;
+      transition: all .3s;
+      min-height: 64px;
+    }
+
+    .week-option input:checked + label {
+      background: linear-gradient(135deg, rgba(139,128,107,.2), rgba(95,87,73,.15));
+      border-color: #8B806B;
+      color: #8B806B;
+      box-shadow: 0 4px 16px rgba(139,128,107,.25);
+      transform: translateY(-2px);
+    }
+
+    .rate-display {
+      text-align: center;
+      padding: 14px;
+      background: rgba(139,128,107,.12);
+      border-radius: 12px;
+      font-weight: 700;
+      color: #8B806B;
+      margin-top: 12px;
+      border: 2px solid rgba(139,128,107,.2);
+    }
+
+    .calc-box {
+      background: linear-gradient(135deg, rgba(139,128,107,.12) 0%, rgba(95,87,73,.08) 100%);
+      border-radius: 20px;
+      padding: 24px;
+      margin-top: 32px;
+      border: 2px solid rgba(139,128,107,.2);
+      box-shadow: 0 8px 24px rgba(0,0,0,.2);
+    }
+
+    .calc-box h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #8B806B;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(139,128,107,.15);
+    }
+
+    .calc-row:last-child {
+      border-bottom: none;
+      margin-top: 8px;
+      padding-top: 16px;
+      border-top: 2px solid rgba(139,128,107,.25);
+    }
+
+    .calc-row span {
+      font-size: 14px;
+      color: rgba(139,128,107,.8);
+      font-weight: 500;
+    }
+
+    .calc-row strong {
+      font-size: 16px;
+      font-weight: 700;
+      color: #8B806B;
+    }
+
+    .calc-row:last-child strong {
+      font-size: 20px;
+      background: linear-gradient(135deg, #8B806B, #5F5749);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .calc-row.discount-row {
+      background: linear-gradient(90deg, rgba(255,215,0,.15), rgba(255,165,0,.1));
+      margin: 8px -12px;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+    }
+
+    .calc-row.discount-row span,
+    .calc-row.discount-row strong {
+      color: #FFA500;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 20px;
+      background: linear-gradient(135deg, #8B806B 0%, #5F5749 100%);
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 32px;
+      box-shadow: 0 8px 24px rgba(139,128,107,.4);
+      transition: all .3s;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .submit-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 4px 12px rgba(139,128,107,.3);
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🚗 КЕНЛИТ АВТО</h1>
-            <p>Оформление договора</p>
-        </div>
-
-        <form id="contractForm">
-            <!-- Тип договора -->
-            <div class="section-title">Тип договора</div>
-            <div class="btn-grid col-4">
-                <div class="option-btn">
-                    <input type="radio" name="contract_type" value="Купли-продажи" id="type1" checked>
-                    <label for="type1">💰 Купли-продажи</label>
-                </div>
-                <div class="option-btn">
-                    <input type="radio" name="contract_type" value="Трейд-ин" id="type2">
-                    <label for="type2">🔄 Трейд-ин</label>
-                </div>
-                <div class="option-btn">
-                    <input type="radio" name="contract_type" value="Обмен" id="type3">
-                    <label for="type3">↔️ Обмен</label>
-                </div>
-                <div class="option-btn">
-                    <input type="radio" name="contract_type" value="Автокредит" id="type4">
-                    <label for="type4">🏦 Автокредит</label>
-                </div>
-            </div>
-
-            <!-- ФИО клиента -->
-            <div class="form-field">
-                <label for="fio">ФИО клиента (только кириллица)</label>
-                <input type="text" id="fio" name="fio" placeholder="Иванов Иван Иванович" required>
-                <small>Используйте только русские буквы</small>
-            </div>
-
-            <!-- Паспортные данные -->
-            <div class="form-field">
-                <label for="passport">Паспортные данные</label>
-                <input type="text" id="passport" name="passport" placeholder="Серия и номер паспорта" required>
-                <small>Например: 1234 567890</small>
-            </div>
-
-            <!-- Адрес регистрации -->
-            <div class="form-field">
-                <label for="address">Адрес регистрации</label>
-                <textarea id="address" name="address" placeholder="Город, улица, дом, квартира" required></textarea>
-            </div>
-
-            <!-- Телефон -->
-            <div class="form-field">
-                <label for="phone">Телефон (6 цифр)</label>
-                <input type="text" id="phone" name="phone" placeholder="333-333" required>
-                <small>Формат: 333-333</small>
-            </div>
-
-            <!-- Марка и модель -->
-            <div class="form-field">
-                <label for="auto">Марка и модель</label>
-                <input type="text" id="auto" name="auto" placeholder="BMW X5" required>
-                <small>Только английские буквы и цифры</small>
-            </div>
-
-            <!-- VIN номер -->
-            <div class="form-field">
-                <label for="vin">VIN номер (17 символов)</label>
-                <input type="text" id="vin" name="vin" placeholder="WBAFE81080L123456" required maxlength="17">
-                <small>17 символов</small>
-            </div>
-
-            <!-- Год выпуска -->
-            <div class="form-field">
-                <label for="year">Год выпуска</label>
-                <input type="number" id="year" name="year" placeholder="2023" required min="1990" max="2026">
-            </div>
-
-            <!-- Цвет кузова -->
-            <div class="form-field">
-                <label for="color">Цвет кузова</label>
-                <input type="text" id="color" name="color" placeholder="Черный" required>
-            </div>
-
-            <!-- Базовая цена -->
-            <div class="form-field">
-                <label for="base_price">Базовая цена</label>
-                <input type="number" id="base_price" name="base_price" placeholder="1000000" required min="0">
-            </div>
-
-            <!-- Доплата за АКПП -->
-            <div class="section-title">Доплата за АКПП</div>
-            <div class="akpp-grid">
-                <div class="option-btn">
-                    <input type="radio" name="akpp_price" value="0" id="akpp0" checked>
-                    <label for="akpp0">Нет</label>
-                </div>
-                <div class="option-btn">
-                    <input type="radio" name="akpp_price" value="100000" id="akpp1">
-                    <label for="akpp1">100 000 ₽</label>
-                </div>
-                <div class="option-btn">
-                    <input type="radio" name="akpp_price" value="250000" id="akpp2">
-                    <label for="akpp2">250 000 ₽</label>
-                </div>
-            </div>
-
-            <!-- Новогодняя скидка -->
-            <div class="discount-box">
-                <input type="checkbox" id="discount" name="discount">
-                <label for="discount">🎄 Новогодняя скидка 26%</label>
-            </div>
-
-            <!-- Срок рассрочки -->
-            <div class="section-title">Срок рассрочки</div>
-            <div class="weeks-grid">
-                <div class="option-btn">
-                    <input type="radio" name="weeks" value="1" id="week1" checked>
-                    <label for="week1">1 нед</label>
-                </div>
-                <div class="option-btn">
-                    <input type="radio" name="weeks" value="2" id="week2">
-                    <label for="week2">2 нед</label>
-                </div>
-                <div class="option-btn">
-                    <input type="radio" name="weeks" value="3" id="week3">
-                    <label for="week3">3 нед</label>
-                </div>
-                <div class="option-btn">
-                    <input type="radio" name="weeks" value="4" id="week4">
-                    <label for="week4">4 нед</label>
-                </div>
-                <div class="option-btn">
-                    <input type="radio" name="weeks" value="5" id="week5">
-                    <label for="week5">5 нед</label>
-                </div>
-                <div class="option-btn">
-                    <input type="radio" name="weeks" value="6" id="week6">
-                    <label for="week6">6 нед</label>
-                </div>
-            </div>
-            <div class="rate-badge" id="rateDisplay">Процентная ставка: 0%</div>
-
-            <!-- Расчет платежей -->
-            <div class="calc-box">
-                <h3>💰 Расчет платежей</h3>
-                <div class="calc-row">
-                    <span>Полная стоимость:</span>
-                    <strong id="fullPrice">0 ₽</strong>
-                </div>
-                <div class="calc-row">
-                    <span>Первый взнос (50%):</span>
-                    <strong id="downPayment">0 ₽</strong>
-                </div>
-                <div class="calc-row">
-                    <span>Сумма в рассрочку:</span>
-                    <strong id="loanBody">0 ₽</strong>
-                </div>
-                <div class="calc-row discount-row" id="discountRow" style="display: none;">
-                    <span>🎄 Новогодняя скидка -26%:</span>
-                    <strong id="discountAmount">0 ₽</strong>
-                </div>
-                <div class="calc-row">
-                    <span>Сумма процентов:</span>
-                    <strong id="interestSum">0 ₽</strong>
-                </div>
-                <div class="calc-row">
-                    <span>Итого к оплате:</span>
-                    <strong id="totalDebt">0 ₽</strong>
-                </div>
-                <div class="calc-row">
-                    <span>Еженедельно:</span>
-                    <strong id="weeklyPayment">0 ₽</strong>
-                </div>
-            </div>
-
-            <button type="submit" class="submit-btn">📤 Отправить данные</button>
-        </form>
+  <div class="container">
+    <div class="header">
+      <div class="logo">🚗</div>
+      <h1>КЕНЛИТ АВТО</h1>
+      <p>Доброе утро</p>
     </div>
 
-    <script>
-        let tg = window.Telegram.WebApp;
-        tg.expand();
+    <form id="contractForm">
+      <!-- Тип договора -->
+      <div class="section-label">Тип договора</div>
+      <div class="type-grid">
+        <div class="type-option">
+          <input type="radio" name="contract_type" value="Купли-продажи" id="type1" checked>
+          <label for="type1">
+            <span class="icon">💰</span>
+            <span class="text">Купли-продажи</span>
+          </label>
+        </div>
+        <div class="type-option">
+          <input type="radio" name="contract_type" value="Трейд-ин" id="type2">
+          <label for="type2">
+            <span class="icon">🔄</span>
+            <span class="text">Трейд-ин</span>
+          </label>
+        </div>
+        <div class="type-option">
+          <input type="radio" name="contract_type" value="Обмен" id="type3">
+          <label for="type3">
+            <span class="icon">↔️</span>
+            <span class="text">Обмен</span>
+          </label>
+        </div>
+        <div class="type-option">
+          <input type="radio" name="contract_type" value="Автокредит" id="type4">
+          <label for="type4">
+            <span class="icon">🏦</span>
+            <span class="text">Автокредит</span>
+          </label>
+        </div>
+      </div>
 
-        const RATES = {1: 0, 2: 5, 3: 10, 4: 15, 5: 20, 6: 25};
+      <!-- ФИО клиента -->
+      <div class="input-group">
+        <label for="fio">ФИО клиента (только кириллица)</label>
+        <input type="text" id="fio" placeholder="Иванов Иван Иванович" required>
+        <small>Используйте только русские буквы</small>
+      </div>
 
-        const form = document.getElementById('contractForm');
-        const basePriceInput = document.getElementById('base_price');
-        const akppInputs = document.querySelectorAll('input[name="akpp_price"]');
-        const weeksInputs = document.querySelectorAll('input[name="weeks"]');
-        const discountCheckbox = document.getElementById('discount');
-        const rateDisplay = document.getElementById('rateDisplay');
+      <!-- Паспортные данные -->
+      <div class="input-group">
+        <label for="passport">Паспортные данные</label>
+        <input type="text" id="passport" placeholder="Серия и номер паспорта" required>
+        <small>Например: 1234 567890</small>
+      </div>
 
-        function calculate() {
-            const basePrice = parseFloat(basePriceInput.value) || 0;
-            const akppPrice = parseFloat(document.querySelector('input[name="akpp_price"]:checked').value) || 0;
-            const weeks = parseInt(document.querySelector('input[name="weeks"]:checked').value) || 1;
-            const hasDiscount = discountCheckbox.checked;
+      <!-- Адрес регистрации -->
+      <div class="input-group">
+        <label for="address">Адрес регистрации</label>
+        <textarea id="address" placeholder="Город, улица, дом, квартира" required></textarea>
+      </div>
 
-            let fullPrice = basePrice + akppPrice;
-            let discountAmount = 0;
+      <!-- Телефон -->
+      <div class="input-group">
+        <label for="phone">Телефон (6 цифр)</label>
+        <input type="text" id="phone" placeholder="333-333" required>
+        <small>Формат: 333-333</small>
+      </div>
 
-            if (hasDiscount) {
-                discountAmount = fullPrice * 0.26;
-                fullPrice = fullPrice - discountAmount;
-            }
+      <!-- Марка и модель -->
+      <div class="input-group">
+        <label for="auto">Марка и модель</label>
+        <input type="text" id="auto" placeholder="BMW X5" required>
+        <small>Только английские буквы и цифры</small>
+      </div>
 
-            const downPayment = fullPrice * 0.5;
-            const loanBody = fullPrice - downPayment;
-            const ratePercent = RATES[weeks] || 0;
-            const interestSum = loanBody * (ratePercent / 100);
-            const totalDebt = loanBody + interestSum;
-            const weeklyPayment = totalDebt / weeks;
+      <!-- VIN номер -->
+      <div class="input-group">
+        <label for="vin">VIN номер (17 символов)</label>
+        <input type="text" id="vin" placeholder="WBAFE81080L123456" maxlength="17" required>
+        <small>17 символов</small>
+      </div>
 
-            document.getElementById('fullPrice').textContent = fullPrice.toLocaleString('ru-RU') + ' ₽';
-            document.getElementById('downPayment').textContent = downPayment.toLocaleString('ru-RU') + ' ₽';
-            document.getElementById('loanBody').textContent = loanBody.toLocaleString('ru-RU') + ' ₽';
-            document.getElementById('interestSum').textContent = interestSum.toLocaleString('ru-RU') + ' ₽';
-            document.getElementById('totalDebt').textContent = totalDebt.toLocaleString('ru-RU') + ' ₽';
-            document.getElementById('weeklyPayment').textContent = weeklyPayment.toLocaleString('ru-RU') + ' ₽';
-            rateDisplay.textContent = `Процентная ставка: ${ratePercent}%`;
+      <!-- Год выпуска -->
+      <div class="input-group">
+        <label for="year">Год выпуска</label>
+        <input type="number" id="year" placeholder="2023" min="1990" max="2026" required>
+      </div>
 
-            const discountRow = document.getElementById('discountRow');
-            if (hasDiscount) {
-                discountRow.style.display = 'flex';
-                document.getElementById('discountAmount').textContent = discountAmount.toLocaleString('ru-RU') + ' ₽';
-            } else {
-                discountRow.style.display = 'none';
-            }
+      <!-- Цвет кузова -->
+      <div class="input-group">
+        <label for="color">Цвет кузова</label>
+        <input type="text" id="color" placeholder="Черный" required>
+      </div>
 
-            return {
-                base_price: basePrice,
-                akpp_price: akppPrice,
-                full_price: fullPrice,
-                down_payment: downPayment,
-                loan_body: loanBody,
-                rate_percent: ratePercent,
-                interest_sum: interestSum,
-                total_debt: totalDebt,
-                weekly_payment: weeklyPayment,
-                weeks: weeks,
-                has_discount: hasDiscount,
-                discount_amount: discountAmount
-            };
-        }
+      <!-- Базовая цена -->
+      <div class="input-group">
+        <label for="base_price">Базовая цена</label>
+        <input type="number" id="base_price" placeholder="0" min="0" required>
+      </div>
 
-        basePriceInput.addEventListener('input', calculate);
-        akppInputs.forEach(input => input.addEventListener('change', calculate));
-        weeksInputs.forEach(input => input.addEventListener('change', calculate));
-        discountCheckbox.addEventListener('change', calculate);
+      <!-- Доплата за АКПП -->
+      <div class="section-label">Доплата за АКПП</div>
+      <div class="akpp-grid">
+        <div class="akpp-option">
+          <input type="radio" name="akpp_price" value="0" id="akpp0" checked>
+          <label for="akpp0">Нет</label>
+        </div>
+        <div class="akpp-option">
+          <input type="radio" name="akpp_price" value="100000" id="akpp1">
+          <label for="akpp1">100 000 ₽</label>
+        </div>
+        <div class="akpp-option">
+          <input type="radio" name="akpp_price" value="250000" id="akpp2">
+          <label for="akpp2">250 000 ₽</label>
+        </div>
+      </div>
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
+      <!-- Новогодняя скидка -->
+      <div class="discount-box">
+        <input type="checkbox" id="discount">
+        <label for="discount">🎄 Новогодняя скидка 26%</label>
+        <span class="discount-badge">-26%</span>
+      </div>
 
-            const fio = document.getElementById('fio').value.trim();
-            const passport = document.getElementById('passport').value.trim();
-            const address = document.getElementById('address').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const auto = document.getElementById('auto').value.trim();
-            const vin = document.getElementById('vin').value.trim();
-            const year = document.getElementById('year').value.trim();
-            const color = document.getElementById('color').value.trim();
+      <!-- Срок рассрочки -->
+      <div class="section-label">Срок рассрочки</div>
+      <div class="weeks-grid">
+        <div class="week-option">
+          <input type="radio" name="weeks" value="1" id="week1" checked>
+          <label for="week1">1 нед</label>
+        </div>
+        <div class="week-option">
+          <input type="radio" name="weeks" value="2" id="week2">
+          <label for="week2">2 нед</label>
+        </div>
+        <div class="week-option">
+          <input type="radio" name="weeks" value="3" id="week3">
+          <label for="week3">3 нед</label>
+        </div>
+        <div class="week-option">
+          <input type="radio" name="weeks" value="4" id="week4">
+          <label for="week4">4 нед</label>
+        </div>
+        <div class="week-option">
+          <input type="radio" name="weeks" value="5" id="week5">
+          <label for="week5">5 нед</label>
+        </div>
+        <div class="week-option">
+          <input type="radio" name="weeks" value="6" id="week6">
+          <label for="week6">6 нед</label>
+        </div>
+      </div>
+      <div class="rate-display" id="rateDisplay">Процентная ставка: 0%</div>
 
-            if (!fio || !passport || !address || !phone || !auto || !vin || !year || !color) {
-                tg.showAlert('❌ Заполните все обязательные поля!');
-                return;
-            }
+      <!-- Расчет платежей -->
+      <div class="calc-box">
+        <h3>💰 Расчет платежей</h3>
+        <div class="calc-row">
+          <span>Полная стоимость:</span>
+          <strong id="fullPrice">0 ₽</strong>
+        </div>
+        <div class="calc-row">
+          <span>Первый взнос (50%):</span>
+          <strong id="downPayment">0 ₽</strong>
+        </div>
+        <div class="calc-row">
+          <span>Сумма в рассрочку:</span>
+          <strong id="loanBody">0 ₽</strong>
+        </div>
+        <div class="calc-row discount-row" id="discountRow" style="display: none;">
+          <span>🎄 Новогодняя скидка -26%:</span>
+          <strong id="discountAmount">0 ₽</strong>
+        </div>
+        <div class="calc-row">
+          <span>Сумма процентов:</span>
+          <strong id="interestSum">0 ₽</strong>
+        </div>
+        <div class="calc-row">
+          <span>Итого к оплате:</span>
+          <strong id="totalDebt">0 ₽</strong>
+        </div>
+        <div class="calc-row">
+          <span>Еженедельно:</span>
+          <strong id="weeklyPayment">0 ₽</strong>
+        </div>
+      </div>
 
-            if (!/^[А-Яа-яЁё\s]+$/.test(fio)) {
-                tg.showAlert('❌ ФИО должно содержать только русские буквы!');
-                return;
-            }
+      <button type="submit" class="submit-btn">📤 Отправить данные</button>
+    </form>
+  </div>
 
-            if (!/^\d{3}-\d{3}$/.test(phone)) {
-                tg.showAlert('❌ Телефон должен быть в формате 333-333!');
-                return;
-            }
+  <script>
+    let tg = window.Telegram.WebApp;
+    tg.expand();
 
-            if (vin.length !== 17) {
-                tg.showAlert('❌ VIN номер должен содержать 17 символов!');
-                return;
-            }
+    const RATES = {1: 0, 2: 5, 3: 10, 4: 15, 5: 20, 6: 25};
 
-            const calculations = calculate();
-            const contractType = document.querySelector('input[name="contract_type"]:checked').value;
-            
-            const data = {
-                contract_type: contractType,
-                fio: fio,
-                passport: passport,
-                address: address,
-                phone: phone,
-                auto: auto,
-                vin: vin.toUpperCase(),
-                year: year,
-                color: color,
-                ...calculations
-            };
+    const basePriceInput = document.getElementById('base_price');
+    const akppInputs = document.querySelectorAll('input[name="akpp_price"]');
+    const weeksInputs = document.querySelectorAll('input[name="weeks"]');
+    const discountCheckbox = document.getElementById('discount');
 
-            console.log('Отправка данных:', data);
-            tg.sendData(JSON.stringify(data));
-        });
+    function calculate() {
+      const basePrice = parseFloat(basePriceInput.value) || 0;
+      const akppPrice = parseFloat(document.querySelector('input[name="akpp_price"]:checked').value) || 0;
+      const weeks = parseInt(document.querySelector('input[name="weeks"]:checked').value) || 1;
+      const hasDiscount = discountCheckbox.checked;
 
-        calculate();
-    </script>
+      let fullPrice = basePrice + akppPrice;
+      let discountAmount = 0;
+
+      if (hasDiscount) {
+        discountAmount = fullPrice * 0.26;
+        fullPrice = fullPrice - discountAmount;
+      }
+
+      const downPayment = fullPrice * 0.5;
+      const loanBody = fullPrice - downPayment;
+      const ratePercent = RATES[weeks] || 0;
+      const interestSum = loanBody * (ratePercent / 100);
+      const totalDebt = loanBody + interestSum;
+      const weeklyPayment = totalDebt / weeks;
+
+      document.getElementById('fullPrice').textContent = fullPrice.toLocaleString('ru-RU') + ' ₽';
+      document.getElementById('downPayment').textContent = downPayment.toLocaleString('ru-RU') + ' ₽';
+      document.getElementById('loanBody').textContent = loanBody.toLocaleString('ru-RU') + ' ₽';
+      document.getElementById('interestSum').textContent = interestSum.toLocaleString('ru-RU') + ' ₽';
+      document.getElementById('totalDebt').textContent = totalDebt.toLocaleString('ru-RU') + ' ₽';
+      document.getElementById('weeklyPayment').textContent = weeklyPayment.toLocaleString('ru-RU') + ' ₽';
+      document.getElementById('rateDisplay').textContent = `Процентная ставка: ${ratePercent}%`;
+
+      const discountRow = document.getElementById('discountRow');
+      if (hasDiscount) {
+        discountRow.style.display = 'flex';
+        document.getElementById('discountAmount').textContent = discountAmount.toLocaleString('ru-RU') + ' ₽';
+      } else {
+        discountRow.style.display = 'none';
+      }
+
+      return {
+        base_price: basePrice,
+        akpp_price: akppPrice,
+        full_price: fullPrice,
+        down_payment: downPayment,
+        loan_body: loanBody,
+        rate_percent: ratePercent,
+        interest_sum: interestSum,
+        total_debt: totalDebt,
+        weekly_payment: weeklyPayment,
+        weeks: weeks,
+        has_discount: hasDiscount,
+        discount_amount: discountAmount
+      };
+    }
+
+    basePriceInput.addEventListener('input', calculate);
+    akppInputs.forEach(input => input.addEventListener('change', calculate));
+    weeksInputs.forEach(input => input.addEventListener('change', calculate));
+    discountCheckbox.addEventListener('change', calculate);
+
+    document.getElementById('contractForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const fio = document.getElementById('fio').value.trim();
+      const passport = document.getElementById('passport').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const auto = document.getElementById('auto').value.trim();
+      const vin = document.getElementById('vin').value.trim();
+      const year = document.getElementById('year').value.trim();
+      const color = document.getElementById('color').value.trim();
+
+      if (!fio || !passport || !address || !phone || !auto || !vin || !year || !color) {
+        tg.showAlert('❌ Заполните все обязательные поля!');
+        return;
+      }
+
+      if (!/^[А-Яа-яЁё\s]+$/.test(fio)) {
+        tg.showAlert('❌ ФИО должно содержать только русские буквы!');
+        return;
+      }
+
+      if (!/^\d{3}-\d{3}$/.test(phone)) {
+        tg.showAlert('❌ Телефон должен быть в формате 333-333!');
+        return;
+      }
+
+      if (vin.length !== 17) {
+        tg.showAlert('❌ VIN номер должен содержать 17 символов!');
+        return;
+      }
+
+      const calculations = calculate();
+      const contractType = document.querySelector('input[name="contract_type"]:checked').value;
+      
+      const data = {
+        contract_type: contractType,
+        fio: fio,
+        passport: passport,
+        address: address,
+        phone: phone,
+        auto: auto,
+        vin: vin.toUpperCase(),
+        year: year,
+        color: color,
+        ...calculations
+      };
+
+      console.log('Отправка данных:', data);
+      tg.sendData(JSON.stringify(data));
+    });
+
+    calculate();
+  </script>
 </body>
 </html>
