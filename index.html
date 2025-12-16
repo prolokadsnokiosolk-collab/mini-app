@@ -64,9 +64,9 @@
     
     small {
       display: block;
-      margin-top: 10px;
+      margin-top: 15px;
       font-size: 10px;
-      opacity: 0.5;
+      opacity: 0.4;
       word-break: break-all;
     }
   </style>
@@ -93,7 +93,7 @@
     
     console.log('[INIT] Telegram WebApp инициализирован');
     
-    // ВАЖНО: Ждём 500мс чтобы initData успел загрузиться
+    // Ждём 500мс чтобы initData успел загрузиться
     setTimeout(function() {
         console.log('[AUTH] Начинаем проверку авторизации...');
         
@@ -113,42 +113,25 @@
             sessionStorage.setItem('tg_user_id', userId);
             sessionStorage.setItem('tg_user_name', userName);
             
-            // Показываем сообщение перед редиректом
-            document.getElementById('content').innerHTML = `
-                <div class="screen">
-                    <div class="icon">✅</div>
-                    <div class="title">Авторизация успешна</div>
-                    <div class="text">
-                        Перенаправление на форму...<br>
-                        User ID: ${userId}
-                    </div>
-                </div>
-            `;
-            
-            // Перенаправляем через 500мс
-            setTimeout(function() {
-                console.log('[AUTH] Редирект на form.html');
-                window.location.href = 'form.html';
-            }, 500);
+            // Сразу перенаправляем (без промежуточного экрана)
+            console.log('[AUTH] Редирект на form.html');
+            window.location.href = 'form.html';
             
         } else {
-            // ❌ НЕ через Telegram
+            // ❌ НЕ через Telegram - заменяем контент
             console.log('[AUTH] ❌ Ошибка: initData пустой или нет user');
-            console.log('[AUTH] initData:', initData);
             
-            document.getElementById('content').innerHTML = `
-                <div class="screen">
-                    <div class="icon">🔒</div>
-                    <div class="title">Доступ запрещён</div>
-                    <div class="text">
-                        Мини-приложение доступно только через Telegram бота.<br><br>
-                        Откройте бота и нажмите /start<br><br>
-                        <small>Debug: initData = ${JSON.stringify(initData)}</small>
-                    </div>
-                </div>
-            `;
+            // ЗАМЕНЯЕМ весь контент (не добавляем!)
+            document.getElementById('content').innerHTML = 
+                '<div class="icon">🔒</div>' +
+                '<div class="title">Доступ запрещён</div>' +
+                '<div class="text">' +
+                'Мини-приложение доступно только через Telegram бота.<br><br>' +
+                'Откройте бота и нажмите /start' +
+                '<small>Debug: initData = ' + JSON.stringify(initData) + '</small>' +
+                '</div>';
         }
-    }, 500); // Задержка 500мс
+    }, 500);
   </script>
 </body>
 </html>
