@@ -3,102 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ТЕСТ</title>
+  <title>ФИНАЛЬНЫЙ ТЕСТ</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 30px;
-      font-family: Arial, sans-serif;
-      text-align: center;
+      background: #1a1a2e;
+      color: #eee;
+      padding: 20px;
+      font-family: 'Segoe UI', sans-serif;
     }
+    h1 {
+      color: #0f3460;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .log {
+      background: #16213e;
+      border-left: 4px solid #0f3460;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 5px;
+      font-size: 13px;
+      word-wrap: break-word;
+    }
+    .success { border-left-color: #4caf50; }
+    .error { border-left-color: #f44336; }
+    .warning { border-left-color: #ff9800; }
     input {
       width: 100%;
       padding: 15px;
       margin: 10px 0;
-      border: none;
-      border-radius: 10px;
+      border: 2px solid #0f3460;
+      border-radius: 8px;
       font-size: 16px;
+      background: #16213e;
+      color: #eee;
     }
-    .info {
-      background: rgba(255,255,255,0.2);
-      padding: 15px;
-      border-radius: 10px;
-      margin: 15px 0;
-      font-size: 14px;
+    input:focus {
+      outline: none;
+      border-color: #4caf50;
     }
   </style>
 </head>
 <body>
-  
-  <h1>📝 ТЕСТ ФОРМЫ</h1>
-  
-  <div class="info" id="status">Инициализация...</div>
-  
-  <input type="text" id="name" placeholder="Ваше ФИО">
-  <input type="text" id="phone" placeholder="Телефон">
+
+  <h1>🔬 ФИНАЛЬНЫЙ ТЕСТ</h1>
+  <div id="logs"></div>
+
+  <input type="text" id="fio" placeholder="ФИО" value="Тестов Тест Тестович">
+  <input type="text" id="phone" placeholder="Телефон" value="123-456">
   <input type="number" id="price" placeholder="Цена" value="500000">
-  
+
   <script>
-    var tg = window.Telegram.WebApp;
-    tg.ready();
-    tg.expand();
-    
-    var status = document.getElementById('status');
-    status.innerHTML = '✅ WebApp готов!<br>Версия: ' + tg.version;
-    
-    // Показываем кнопку
-    tg.MainButton.setText('ОТПРАВИТЬ ДАННЫЕ');
-    tg.MainButton.color = '#5b9bd5';
-    tg.MainButton.textColor = '#ffffff';
-    tg.MainButton.show();
-    
-    // Обработчик кнопки
-    tg.MainButton.onClick(function(){
-      var name = document.getElementById('name').value;
-      var phone = document.getElementById('phone').value;
-      var price = document.getElementById('price').value;
-      
-      if (!name || !phone || !price) {
-        tg.showAlert('❌ Заполните все поля!');
-        return;
-      }
-      
-      var data = {
-        contract_type: 'sale',
-        seller_type: 'company',
-        fio: name,
-        phone: phone,
-        auto: 'Test Auto',
-        vin: 'TEST1234567890XXX',
-        base_price: parseFloat(price),
-        akpp_price: 0,
-        full_price: parseFloat(price),
-        down_payment: parseFloat(price) * 0.5,
-        loan_body: parseFloat(price) * 0.5,
-        rate_percent: 0,
-        interest_sum: 0,
-        has_discount: false,
-        discount_amount: 0,
-        total_debt: parseFloat(price) * 0.5,
-        weeks: 1,
-        weekly_payment: parseFloat(price) * 0.5
-      };
-      
-      var jsonData = JSON.stringify(data);
-      
-      status.innerHTML = '📤 Отправка данных...<br>Размер: ' + jsonData.length + ' символов';
-      
-      try {
-        tg.sendData(jsonData);
-        status.innerHTML = '✅ ДАННЫЕ ОТПРАВЛЕНЫ!';
-      } catch(e) {
-        status.innerHTML = '❌ Ошибка: ' + e.message;
-        tg.showAlert('Ошибка: ' + e.message);
-      }
-    });
-  </script>
-  
-</body>
-</html>
+    var logsDiv = document.getElementById('logs');
+
+    function log(msg, type) {
+      var div = document.createElement('div');
+      div.className = 'log ' + (type || '');
+      div.innerHTML = new Date().toLocaleTimeString() + ' - ' + msg;
+      logsDiv.appendChild(div);
+      console.log(msg);
+    }
+
+    log('1. Скрипт загружен', 'success');
+
+    if (typeof window.Telegram === 'undefined') {
+      log('❌ КРИТИЧНО: window.Telegram отсутствует!', 'error');
+    } else {
+      log('2. window.Telegram найден', 'success');
+    }
+
+    if (typeof 
