@@ -148,7 +148,6 @@
       border-color: rgba(255,100,100,.5);
     }
 
-    /* Убираем стрелки у number */
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button {
       -webkit-appearance: none;
@@ -386,7 +385,6 @@
       </div>
     </div>
 
-    <!-- Выбор продавца -->
     <div class="form-group" id="seller-block" style="display:none;">
       <label>Кто является продавцом?</label>
       <div class="button-group">
@@ -487,268 +485,273 @@
     const RATES = {1:0,2:5,3:10,4:15,5:20,6:25};
     const tg = window.Telegram.WebApp;
 
-    tg.ready();
-    tg.expand();
+    // ГЛАВНОЕ ИСПРАВЛЕНИЕ - ВСЁ ОБЁРНУТО В DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', function() {
+      
+      tg.ready();
+      tg.expand();
 
-    function getGreeting() {
-      const h = new Date().getHours();
-      if (h < 6 || h >= 22) return "Доброй ночи";
-      if (h < 11) return "Доброе утро";
-      if (h < 17) return "Добрый день";
-      return "Добрый вечер";
-    }
-
-    document.getElementById('greeting').textContent = getGreeting();
-
-    function createSnowflakes() {
-      const container = document.getElementById('snowContainer');
-      const count = 30;
-      for (let i = 0; i < count; i++) {
-        const s = document.createElement('div');
-        s.className = 'snowflake';
-        s.innerHTML = ['❄','❅','❆'][Math.floor(Math.random()*3)];
-        s.style.left = Math.random()*100 + '%';
-        s.style.animationDuration = (Math.random()*3 + 8) + 's';
-        s.style.animationDelay = Math.random()*5 + 's';
-        s.style.fontSize = (Math.random()*10 + 10) + 'px';
-        s.style.opacity = Math.random()*0.6 + 0.4;
-        container.appendChild(s);
+      function getGreeting() {
+        const h = new Date().getHours();
+        if (h < 6 || h >= 22) return "Доброй ночи";
+        if (h < 11) return "Доброе утро";
+        if (h < 17) return "Добрый день";
+        return "Добрый вечер";
       }
-    }
-    createSnowflakes();
 
-    let selectedType = null;
-    let selectedAkpp = 0;
-    let selectedWeeks = 1;
-    let hasDiscount = false;
-    let sellerType = null;
+      document.getElementById('greeting').textContent = getGreeting();
 
-    document.querySelectorAll('.contract-type-btn').forEach(btn => {
-      btn.addEventListener('click', function(){
-        document.querySelectorAll('.contract-type-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        selectedType = this.dataset.type;
+      function createSnowflakes() {
+        const container = document.getElementById('snowContainer');
+        const count = 30;
+        for (let i = 0; i < count; i++) {
+          const s = document.createElement('div');
+          s.className = 'snowflake';
+          s.innerHTML = ['❄','❅','❆'][Math.floor(Math.random()*3)];
+          s.style.left = Math.random()*100 + '%';
+          s.style.animationDuration = (Math.random()*3 + 8) + 's';
+          s.style.animationDelay = Math.random()*5 + 's';
+          s.style.fontSize = (Math.random()*10 + 10) + 'px';
+          s.style.opacity = Math.random()*0.6 + 0.4;
+          container.appendChild(s);
+        }
+      }
+      createSnowflakes();
 
-        const sellerBlock = document.getElementById('seller-block');
-        if (selectedType === 'sale') {
-          sellerBlock.style.display = 'block';
-        } else {
-          sellerBlock.style.display = 'none';
-          sellerType = null;
+      let selectedType = null;
+      let selectedAkpp = 0;
+      let selectedWeeks = 1;
+      let hasDiscount = false;
+      let sellerType = null;
+
+      document.querySelectorAll('.contract-type-btn').forEach(btn => {
+        btn.addEventListener('click', function(){
+          document.querySelectorAll('.contract-type-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          selectedType = this.dataset.type;
+
+          const sellerBlock = document.getElementById('seller-block');
+          if (selectedType === 'sale') {
+            sellerBlock.style.display = 'block';
+          } else {
+            sellerBlock.style.display = 'none';
+            sellerType = null;
+            document.querySelectorAll('.seller-choice').forEach(b => b.classList.remove('active'));
+          }
+        });
+      });
+
+      document.querySelectorAll('.seller-choice').forEach(btn => {
+        btn.addEventListener('click', function () {
           document.querySelectorAll('.seller-choice').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          sellerType = this.dataset.seller;
+        });
+      });
+
+      document.querySelectorAll('.choice-btn').forEach(btn => {
+        if (!btn.classList.contains('seller-choice')) {
+          btn.addEventListener('click', function(){
+            document.querySelectorAll('.choice-btn').forEach(b => {
+              if (!b.classList.contains('seller-choice')) b.classList.remove('active');
+            });
+            this.classList.add('active');
+            selectedAkpp = parseInt(this.dataset.akpp);
+            calc();
+          });
         }
       });
-    });
 
-    document.querySelectorAll('.seller-choice').forEach(btn => {
-      btn.addEventListener('click', function () {
-        document.querySelectorAll('.seller-choice').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        sellerType = this.dataset.seller;
-      });
-    });
-
-    document.querySelectorAll('.choice-btn').forEach(btn => {
-      if (!btn.classList.contains('seller-choice')) {
-        btn.addEventListener('click', function(){
-          document.querySelectorAll('.choice-btn').forEach(b => {
-            if (!b.classList.contains('seller-choice')) b.classList.remove('active');
-          });
-          this.classList.add('active');
-          selectedAkpp = parseInt(this.dataset.akpp);
-          calc();
-        });
-      }
-    });
-
-    document.getElementById('discount-btn').addEventListener('click', function(){
-      this.classList.toggle('active');
-      hasDiscount = this.classList.contains('active');
-      calc();
-    });
-
-    document.querySelectorAll('.week-btn').forEach(btn => {
-      btn.addEventListener('click', function(){
-        document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        selectedWeeks = parseInt(this.dataset.weeks);
+      document.getElementById('discount-btn').addEventListener('click', function(){
+        this.classList.toggle('active');
+        hasDiscount = this.classList.contains('active');
         calc();
       });
-    });
 
-    function sanitize(str) {
-      return str.replace(/[<>"'`\\/;{}()]/g, '');
-    }
+      document.querySelectorAll('.week-btn').forEach(btn => {
+        btn.addEventListener('click', function(){
+          document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          selectedWeeks = parseInt(this.dataset.weeks);
+          calc();
+        });
+      });
 
-    document.getElementById('fio').addEventListener('input', e => {
-      const v = e.target.value;
-      const re = /^[А-Яа-яЁё\s-]+$/;
-      const err = document.getElementById('fio-error');
-      if (v && !re.test(v)) {
-        e.target.classList.add('error');
-        err.style.display = 'block';
-        e.target.value = v.replace(/[^А-Яа-яЁё\s-]/g,'');
-      } else {
-        e.target.classList.remove('error');
-        err.style.display = 'none';
-      }
-    });
-
-    document.getElementById('phone').addEventListener('input', e => {
-      let v = e.target.value.replace(/[^0-9]/g,'');
-      const err = document.getElementById('phone-error');
-      if (v.length > 3) v = v.slice(0,3) + '-' + v.slice(3,6);
-      e.target.value = v;
-      if (v.length === 7 && v.includes('-')) {
-        e.target.classList.remove('error');
-        err.style.display = 'none';
-      } else if (v.length > 0) {
-        e.target.classList.add('error');
-        err.style.display = 'block';
-      }
-    });
-
-    document.getElementById('auto').addEventListener('input', e => {
-      const v = e.target.value;
-      const re = /^[A-Za-z0-9\s-]+$/;
-      const err = document.getElementById('auto-error');
-      if (v && !re.test(v)) {
-        e.target.classList.add('error');
-        err.style.display = 'block';
-        e.target.value = v.replace(/[^A-Za-z0-9\s-]/g,'');
-      } else {
-        e.target.classList.remove('error');
-        err.style.display = 'none';
-      }
-    });
-
-    document.getElementById('vin').addEventListener('input', e => {
-      const val = e.target.value.toUpperCase();
-      const re = /^[A-Z0-9]+$/;
-      const err = document.getElementById('vin-error');
-      if (val && !re.test(val)) {
-        e.target.classList.add('error');
-        err.style.display = 'block';
-        e.target.value = val.replace(/[^A-Z0-9]/g,'');
-      } else if (val.length === 17) {
-        e.target.classList.remove('error');
-        err.style.display = 'none';
-      } else if (val.length > 0) {
-        e.target.classList.add('error');
-        err.style.display = 'block';
-      }
-      e.target.value = e.target.value.toUpperCase();
-    });
-
-    function fmt(n){ return Math.round(n).toLocaleString('ru-RU'); }
-
-    function calc(){
-      const bp = parseFloat(document.getElementById('base_price').value) || 0;
-      const ap = selectedAkpp;
-      const w  = selectedWeeks;
-
-      const fp = bp + ap;
-      const dp = fp * 0.5;
-      let lb = fp - dp;
-
-      const rp = RATES[w] || 0;
-      const is = lb * (rp / 100);
-      let td = lb + is;
-
-      let discountAmount = 0;
-
-      if (hasDiscount) {
-        discountAmount = td * 0.26;
-        td = td - discountAmount;
-        document.getElementById('discount-row').style.display = 'flex';
-        document.getElementById('discount_amount').textContent = '- ' + fmt(discountAmount) + ' ₽';
-      } else {
-        document.getElementById('discount-row').style.display = 'none';
+      function sanitize(str) {
+        return str.replace(/[<>"'`\\/;{}()]/g, '');
       }
 
-      const wp = w > 0 ? td / w : 0;
+      document.getElementById('fio').addEventListener('input', e => {
+        const v = e.target.value;
+        const re = /^[А-Яа-яЁё\s-]+$/;
+        const err = document.getElementById('fio-error');
+        if (v && !re.test(v)) {
+          e.target.classList.add('error');
+          err.style.display = 'block';
+          e.target.value = v.replace(/[^А-Яа-яЁё\s-]/g,'');
+        } else {
+          e.target.classList.remove('error');
+          err.style.display = 'none';
+        }
+      });
 
-      document.getElementById('rate').textContent = rp + '%';
-      document.getElementById('full_price').textContent = fmt(fp) + ' ₽';
-      document.getElementById('down_payment').textContent = fmt(dp) + ' ₽';
-      document.getElementById('loan_body').textContent = fmt(lb) + ' ₽';
-      document.getElementById('weekly_payment').textContent = fmt(wp) + ' ₽';
+      document.getElementById('phone').addEventListener('input', e => {
+        let v = e.target.value.replace(/[^0-9]/g,'');
+        const err = document.getElementById('phone-error');
+        if (v.length > 3) v = v.slice(0,3) + '-' + v.slice(3,6);
+        e.target.value = v;
+        if (v.length === 7 && v.includes('-')) {
+          e.target.classList.remove('error');
+          err.style.display = 'none';
+        } else if (v.length > 0) {
+          e.target.classList.add('error');
+          err.style.display = 'block';
+        }
+      });
 
-      return {
-        base_price: bp,
-        akpp_price: ap,
-        full_price: fp,
-        down_payment: dp,
-        loan_body: lb,
-        rate_percent: rp,
-        interest_sum: is,
-        has_discount: hasDiscount,
-        discount_amount: discountAmount,
-        total_debt: td,
-        weeks: w,
-        weekly_payment: wp
-      };
-    }
+      document.getElementById('auto').addEventListener('input', e => {
+        const v = e.target.value;
+        const re = /^[A-Za-z0-9\s-]+$/;
+        const err = document.getElementById('auto-error');
+        if (v && !re.test(v)) {
+          e.target.classList.add('error');
+          err.style.display = 'block';
+          e.target.value = v.replace(/[^A-Za-z0-9\s-]/g,'');
+        } else {
+          e.target.classList.remove('error');
+          err.style.display = 'none';
+        }
+      });
 
-    document.getElementById('base_price').addEventListener('input', calc);
-    calc();
+      document.getElementById('vin').addEventListener('input', e => {
+        const val = e.target.value.toUpperCase();
+        const re = /^[A-Z0-9]+$/;
+        const err = document.getElementById('vin-error');
+        if (val && !re.test(val)) {
+          e.target.classList.add('error');
+          err.style.display = 'block';
+          e.target.value = val.replace(/[^A-Z0-9]/g,'');
+        } else if (val.length === 17) {
+          e.target.classList.remove('error');
+          err.style.display = 'none';
+        } else if (val.length > 0) {
+          e.target.classList.add('error');
+          err.style.display = 'block';
+        }
+        e.target.value = e.target.value.toUpperCase();
+      });
 
-    // ТОЧНАЯ КОПИЯ ИЗ form.html
-    tg.MainButton.setText('✅ ОТПРАВИТЬ ДАННЫЕ');
-    tg.MainButton.color = '#dac5a4';
-    tg.MainButton.textColor = '#1a1a1a';
-    tg.MainButton.show();
+      function fmt(n){ return Math.round(n).toLocaleString('ru-RU'); }
 
-    tg.MainButton.onClick(function(){
-      const fio  = sanitize(document.getElementById('fio').value.trim());
-      const phone= document.getElementById('phone').value.trim();
-      const auto = sanitize(document.getElementById('auto').value.trim());
-      const vin  = document.getElementById('vin').value.trim().toUpperCase();
-      const base = parseFloat(document.getElementById('base_price').value);
+      function calc(){
+        const bp = parseFloat(document.getElementById('base_price').value) || 0;
+        const ap = selectedAkpp;
+        const w  = selectedWeeks;
 
-      if (!selectedType) {
-        tg.showAlert('❌ Выберите тип договора');
-        return;
+        const fp = bp + ap;
+        const dp = fp * 0.5;
+        let lb = fp - dp;
+
+        const rp = RATES[w] || 0;
+        const is = lb * (rp / 100);
+        let td = lb + is;
+
+        let discountAmount = 0;
+
+        if (hasDiscount) {
+          discountAmount = td * 0.26;
+          td = td - discountAmount;
+          document.getElementById('discount-row').style.display = 'flex';
+          document.getElementById('discount_amount').textContent = '- ' + fmt(discountAmount) + ' ₽';
+        } else {
+          document.getElementById('discount-row').style.display = 'none';
+        }
+
+        const wp = w > 0 ? td / w : 0;
+
+        document.getElementById('rate').textContent = rp + '%';
+        document.getElementById('full_price').textContent = fmt(fp) + ' ₽';
+        document.getElementById('down_payment').textContent = fmt(dp) + ' ₽';
+        document.getElementById('loan_body').textContent = fmt(lb) + ' ₽';
+        document.getElementById('weekly_payment').textContent = fmt(wp) + ' ₽';
+
+        return {
+          base_price: bp,
+          akpp_price: ap,
+          full_price: fp,
+          down_payment: dp,
+          loan_body: lb,
+          rate_percent: rp,
+          interest_sum: is,
+          has_discount: hasDiscount,
+          discount_amount: discountAmount,
+          total_debt: td,
+          weeks: w,
+          weekly_payment: wp
+        };
       }
 
-      if (!fio || !/^[А-Яа-яЁё\s-]+$/.test(fio)) {
-        tg.showAlert('❌ Проверьте ФИО');
-        return;
-      }
-      if (phone.length !== 7 || !phone.includes('-')) {
-        tg.showAlert('❌ Телефон: 333-333');
-        return;
-      }
-      if (!auto || !/^[A-Za-z0-9\s-]+$/.test(auto)) {
-        tg.showAlert('❌ Проверьте марку авто');
-        return;
-      }
-      if (vin.length !== 17 || !/^[A-Z0-9]+$/.test(vin)) {
-        tg.showAlert('❌ VIN: 17 символов');
-        return;
-      }
-      if (!base || base <= 0) {
-        tg.showAlert('❌ Укажите цену');
-        return;
-      }
+      document.getElementById('base_price').addEventListener('input', calc);
+      calc();
 
-      if (selectedType === 'sale' && !sellerType) {
-        tg.showAlert('❌ Выберите, кто является продавцом');
-        return;
-      }
+      // КНОПКА - ТЕПЕРЬ ВСЁ ВНУТРИ DOMContentLoaded
+      tg.MainButton.setText('✅ ОТПРАВИТЬ ДАННЫЕ');
+      tg.MainButton.color = '#dac5a4';
+      tg.MainButton.textColor = '#1a1a1a';
+      tg.MainButton.show();
 
-      const data = {
-        contract_type: selectedType,
-        seller_type: sellerType || 'citizen',
-        fio,
-        phone,
-        auto,
-        vin,
-        ...calc()
-      };
+      tg.MainButton.onClick(function(){
+        const fio  = sanitize(document.getElementById('fio').value.trim());
+        const phone= document.getElementById('phone').value.trim();
+        const auto = sanitize(document.getElementById('auto').value.trim());
+        const vin  = document.getElementById('vin').value.trim().toUpperCase();
+        const base = parseFloat(document.getElementById('base_price').value);
 
-      tg.sendData(JSON.stringify(data));
-    });
+        if (!selectedType) {
+          tg.showAlert('❌ Выберите тип договора');
+          return;
+        }
+
+        if (!fio || !/^[А-Яа-яЁё\s-]+$/.test(fio)) {
+          tg.showAlert('❌ Проверьте ФИО');
+          return;
+        }
+        if (phone.length !== 7 || !phone.includes('-')) {
+          tg.showAlert('❌ Телефон: 333-333');
+          return;
+        }
+        if (!auto || !/^[A-Za-z0-9\s-]+$/.test(auto)) {
+          tg.showAlert('❌ Проверьте марку авто');
+          return;
+        }
+        if (vin.length !== 17 || !/^[A-Z0-9]+$/.test(vin)) {
+          tg.showAlert('❌ VIN: 17 символов');
+          return;
+        }
+        if (!base || base <= 0) {
+          tg.showAlert('❌ Укажите цену');
+          return;
+        }
+
+        if (selectedType === 'sale' && !sellerType) {
+          tg.showAlert('❌ Выберите, кто является продавцом');
+          return;
+        }
+
+        const data = {
+          contract_type: selectedType,
+          seller_type: sellerType || 'citizen',
+          fio,
+          phone,
+          auto,
+          vin,
+          ...calc()
+        };
+
+        tg.sendData(JSON.stringify(data));
+      });
+      
+    }); // КОНЕЦ DOMContentLoaded
   </script>
 </body>
 </html>
