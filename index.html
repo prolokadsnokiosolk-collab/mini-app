@@ -3,117 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ТЕСТ ОТПРАВКИ</title>
+  <title>ТЕСТ</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     body {
-      background: #000;
-      color: #0f0;
-      padding: 20px;
-      font-family: monospace;
-      font-size: 16px;
-    }
-    .btn {
-      background: #4CAF50;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      padding: 20px 40px;
+      padding: 30px;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
       border: none;
       border-radius: 10px;
-      font-size: 20px;
-      margin: 10px;
-      cursor: pointer;
-      width: 100%;
+      font-size: 16px;
     }
-    .log {
-      background: #222;
-      padding: 10px;
-      margin: 10px 0;
-      border-left: 3px solid #0f0;
+    .info {
+      background: rgba(255,255,255,0.2);
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
   
-  <h1>🧪 ТЕСТ ОТПРАВКИ ДАННЫХ</h1>
-  <div id="log"></div>
+  <h1>📝 ТЕСТ ФОРМЫ</h1>
   
-  <button class="btn" onclick="testSend()">📤 ОТПРАВИТЬ ТЕСТОВЫЕ ДАННЫЕ</button>
+  <div class="info" id="status">Инициализация...</div>
+  
+  <input type="text" id="name" placeholder="Ваше ФИО">
+  <input type="text" id="phone" placeholder="Телефон">
+  <input type="number" id="price" placeholder="Цена" value="500000">
   
   <script>
     var tg = window.Telegram.WebApp;
-    var logDiv = document.getElementById('log');
-    
-    function addLog(msg) {
-      var p = document.createElement('div');
-      p.className = 'log';
-      p.innerHTML = msg;
-      logDiv.appendChild(p);
-    }
-    
     tg.ready();
     tg.expand();
     
-    addLog('✅ 1. WebApp инициализирован');
-    addLog('✅ 2. Версия: ' + (tg.version || 'неизвестно'));
-    addLog('✅ 3. Platform: ' + (tg.platform || 'неизвестно'));
+    var status = document.getElementById('status');
+    status.innerHTML = '✅ WebApp готов!<br>Версия: ' + tg.version;
     
-    // Показываем MainButton
-    tg.MainButton.setText('📤 ОТПРАВИТЬ ЧЕРЕЗ MAINBUTTON');
-    tg.MainButton.color = '#4CAF50';
-    tg.MainButton.textColor = '#FFFFFF';
+    // Показываем кнопку
+    tg.MainButton.setText('ОТПРАВИТЬ ДАННЫЕ');
+    tg.MainButton.color = '#5b9bd5';
+    tg.MainButton.textColor = '#ffffff';
     tg.MainButton.show();
     
-    addLog('✅ 4. MainButton показан');
-    
-    // Обработчик MainButton
+    // Обработчик кнопки
     tg.MainButton.onClick(function(){
-      addLog('🎯 5. MainButton НАЖАТ!');
-      sendData();
-    });
-    
-    addLog('✅ 6. Обработчик установлен');
-    
-    function testSend() {
-      addLog('🎯 Кнопка "ОТПРАВИТЬ" нажата!');
-      sendData();
-    }
-    
-    function sendData() {
-      var testData = {
+      var name = document.getElementById('name').value;
+      var phone = document.getElementById('phone').value;
+      var price = document.getElementById('price').value;
+      
+      if (!name || !phone || !price) {
+        tg.showAlert('❌ Заполните все поля!');
+        return;
+      }
+      
+      var data = {
         contract_type: 'sale',
         seller_type: 'company',
-        fio: 'Тестов Тест Тестович',
-        phone: '123-456',
-        auto: 'Test Car',
-        vin: 'TEST12345678901XX',
-        base_price: 500000,
+        fio: name,
+        phone: phone,
+        auto: 'Test Auto',
+        vin: 'TEST1234567890XXX',
+        base_price: parseFloat(price),
         akpp_price: 0,
-        full_price: 500000,
-        down_payment: 250000,
-        loan_body: 250000,
+        full_price: parseFloat(price),
+        down_payment: parseFloat(price) * 0.5,
+        loan_body: parseFloat(price) * 0.5,
         rate_percent: 0,
         interest_sum: 0,
         has_discount: false,
         discount_amount: 0,
-        total_debt: 250000,
+        total_debt: parseFloat(price) * 0.5,
         weeks: 1,
-        weekly_payment: 250000
+        weekly_payment: parseFloat(price) * 0.5
       };
       
-      var jsonString = JSON.stringify(testData);
+      var jsonData = JSON.stringify(data);
       
-      addLog('📦 Данные подготовлены:');
-      addLog('Размер: ' + jsonString.length + ' символов');
-      addLog('Первые 100 символов: ' + jsonString.substring(0, 100));
+      status.innerHTML = '📤 Отправка данных...<br>Размер: ' + jsonData.length + ' символов';
       
       try {
-        addLog('⏳ Вызываем tg.sendData()...');
-        tg.sendData(jsonString);
-        addLog('✅ tg.sendData() выполнен БЕЗ ОШИБОК!');
+        tg.sendData(jsonData);
+        status.innerHTML = '✅ ДАННЫЕ ОТПРАВЛЕНЫ!';
       } catch(e) {
-        addLog('❌ ОШИБКА при sendData: ' + e.message);
+        status.innerHTML = '❌ Ошибка: ' + e.message;
+        tg.showAlert('Ошибка: ' + e.message);
       }
-    }
+    });
   </script>
   
 </body>
