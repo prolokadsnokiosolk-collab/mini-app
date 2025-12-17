@@ -1,573 +1,697 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Оформление договора</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>КЕНЛИТ АВТО</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            padding-bottom: 100px;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
+    body {
+      font-family: 'Montserrat', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 50%, #0d0d0d 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+    body::before {
+      content: '❄️';
+      position: fixed;
+      font-size: 20px;
+      animation: snow 10s linear infinite;
+      opacity: 0.6;
+    }
 
-        .header-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
+    @keyframes snow {
+      0% { top: -10%; }
+      100% { top: 100%; }
+    }
 
-        h1 {
-            font-size: 24px;
-            color: #1a1a1a;
-            font-weight: 600;
-        }
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px 20px 120px;
+      position: relative;
+      z-index: 1;
+    }
 
-        .input-group {
-            margin-bottom: 20px;
-        }
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding: 32px 20px 24px;
+      background: linear-gradient(135deg, rgba(139,128,107,.15) 0%, rgba(95,87,73,.1) 100%);
+      border-radius: 24px;
+      border: 1px solid rgba(218,197,164,.2);
+      backdrop-filter: blur(10px);
+    }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            color: #333;
-        }
+    .header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: #dac5a4;
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 10px rgba(218,197,164,.3);
+    }
 
-        input, select {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s;
-            background: white;
-        }
+    .header p {
+      color: rgba(218,197,164,.8);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
 
-        input:focus, select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
+    .contract-type-section {
+      margin-bottom: 32px;
+    }
 
-        select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
-            padding-right: 40px;
-        }
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(218,197,164,.8);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
 
-        /* НОВЫЕ СТИЛИ ДЛЯ ВЫБОРА ПРОДАВЦА */
-        .seller-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 10px;
-        }
+    .contract-types {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
 
-        .seller-btn {
-            padding: 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            background: white;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-            transition: all 0.3s;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            align-items: center;
-        }
+    .contract-type-btn {
+      padding: 20px 12px;
+      background: rgba(255,255,255,.03);
+      border: 2px solid rgba(218,197,164,.15);
+      border-radius: 16px;
+      color: rgba(218,197,164,.8);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+      backdrop-filter: blur(5px);
+    }
 
-        .seller-btn:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
-        }
+    .contract-type-btn:hover {
+      background: rgba(255,255,255,.06);
+      border-color: rgba(218,197,164,.3);
+      transform: translateY(-2px);
+    }
 
-        .seller-btn.active {
-            border-color: #667eea;
-            background: #667eea;
-            color: white;
-        }
+    .contract-type-btn.active {
+      background: linear-gradient(135deg, rgba(218,197,164,.15) 0%, rgba(139,128,107,.12) 100%);
+      border-color: #dac5a4;
+      box-shadow: 0 8px 24px rgba(218,197,164,.15);
+    }
 
-        .seller-btn .icon {
-            font-size: 28px;
-        }
+    .contract-type-btn .icon {
+      font-size: 32px;
+    }
 
-        .seller-btn .text {
-            font-size: 13px;
-            line-height: 1.3;
-        }
+    /* НОВОЕ: Стили для кнопок выбора продавца */
+    .seller-btn {
+      padding: 20px 12px;
+      background: rgba(255,255,255,.03);
+      border: 2px solid rgba(218,197,164,.15);
+      border-radius: 16px;
+      color: rgba(218,197,164,.8);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      backdrop-filter: blur(5px);
+      font-size: 13px;
+      font-weight: 600;
+    }
 
-        .week-selector {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-        }
+    .seller-btn:hover {
+      background: rgba(255,255,255,.06);
+      border-color: rgba(218,197,164,.3);
+      transform: translateY(-2px);
+    }
 
-        .week-btn {
-            padding: 14px 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-        }
+    .seller-btn.active {
+      background: linear-gradient(135deg, rgba(218,197,164,.15) 0%, rgba(139,128,107,.12) 100%);
+      border-color: #dac5a4;
+      box-shadow: 0 8px 24px rgba(218,197,164,.15);
+    }
 
-        .week-btn:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
-        }
+    .form-group {
+      margin-bottom: 20px;
+    }
 
-        .week-btn.active {
-            border-color: #667eea;
-            background: #667eea;
-            color: white;
-        }
+    .form-group label {
+      display: block;
+      color: rgba(218,197,164,.9);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
 
-        .week-btn .weeks {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255,255,255,.05);
+      border: 2px solid rgba(218,197,164,.15);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 15px;
+      font-family: 'Montserrat', sans-serif;
+      transition: all 0.3s ease;
+    }
 
-        .week-btn .rate {
-            font-size: 12px;
-            color: #666;
-        }
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #dac5a4;
+      background: rgba(255,255,255,.08);
+      box-shadow: 0 0 0 4px rgba(218,197,164,.1);
+    }
 
-        .week-btn.active .rate {
-            color: rgba(255, 255, 255, 0.9);
-        }
+    .form-group input::placeholder {
+      color: rgba(255,255,255,.3);
+    }
 
-        .price-info {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-        }
+    .form-group small {
+      display: block;
+      color: rgba(218,197,164,.6);
+      font-size: 11px;
+      margin-top: 6px;
+    }
 
-        .price-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
+    .akpp-options {
+      display: grid;
+      gap: 10px;
+    }
 
-        .price-row.total {
-            font-weight: 700;
-            font-size: 18px;
-            padding-top: 15px;
-            border-top: 2px solid rgba(255, 255, 255, 0.3);
-            margin-top: 10px;
-        }
+    .akpp-option {
+      padding: 14px 16px;
+      background: rgba(255,255,255,.03);
+      border: 2px solid rgba(218,197,164,.15);
+      border-radius: 12px;
+      color: rgba(218,197,164,.8);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 20px 0;
-            padding: 16px;
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            border-radius: 12px;
-            color: white;
-            font-weight: 600;
-        }
+    .akpp-option:hover {
+      background: rgba(255,255,255,.06);
+      border-color: rgba(218,197,164,.3);
+    }
 
-        .checkbox-group input[type="checkbox"] {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-        }
+    .akpp-option.active {
+      background: rgba(218,197,164,.15);
+      border-color: #dac5a4;
+    }
 
-        .checkbox-group label {
-            margin: 0;
-            cursor: pointer;
-            color: white;
-        }
+    .discount-banner {
+      background: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%);
+      padding: 16px 20px;
+      border-radius: 16px;
+      margin: 24px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 24px rgba(196,30,58,.3);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
 
-        @media (max-width: 480px) {
-            .container {
-                padding: 20px;
-            }
+    .discount-banner:hover {
+      transform: scale(1.02);
+    }
 
-            .week-selector {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .seller-buttons {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    .discount-banner input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+    }
+
+    .discount-banner label {
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .discount-badge {
+      background: rgba(255,255,255,.2);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .weeks-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 10px;
+    }
+
+    .week-btn {
+      padding: 16px 8px;
+      background: rgba(255,255,255,.03);
+      border: 2px solid rgba(218,197,164,.15);
+      border-radius: 12px;
+      color: rgba(218,197,164,.8);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .week-btn:hover {
+      background: rgba(255,255,255,.06);
+      border-color: rgba(218,197,164,.3);
+    }
+
+    .week-btn.active {
+      background: linear-gradient(135deg, rgba(218,197,164,.2) 0%, rgba(139,128,107,.15) 100%);
+      border-color: #dac5a4;
+      box-shadow: 0 4px 16px rgba(218,197,164,.2);
+    }
+
+    .week-btn .week-number {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .week-btn .rate {
+      font-size: 11px;
+      opacity: 0.7;
+    }
+
+    .rate-display {
+      text-align: center;
+      color: #dac5a4;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+
+    .calculation {
+      background: linear-gradient(135deg, rgba(218,197,164,.08) 0%, rgba(139,128,107,.05) 100%);
+      border: 1px solid rgba(218,197,164,.2);
+      border-radius: 20px;
+      padding: 20px;
+      margin: 24px 0;
+    }
+
+    .calculation h3 {
+      color: #dac5a4;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      color: rgba(218,197,164,.9);
+      font-size: 14px;
+      border-bottom: 1px solid rgba(218,197,164,.1);
+    }
+
+    .calc-row:last-child {
+      border-bottom: none;
+      padding-top: 16px;
+      margin-top: 8px;
+      border-top: 2px solid rgba(218,197,164,.2);
+      font-size: 16px;
+      font-weight: 700;
+      color: #dac5a4;
+    }
+
+    .calc-row.discount {
+      color: #c41e3a;
+      font-weight: 600;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #dac5a4 0%, #b8a383 100%);
+      border: none;
+      border-radius: 16px;
+      color: #1a1a1a;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 24px rgba(218,197,164,.3);
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(218,197,164,.4);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="header-icon">📝</div>
-            <h1>Оформление договора</h1>
-        </div>
-        
-        <form id="contractForm">
-            <!-- Тип договора -->
-            <div class="input-group">
-                <label for="contract_type">Тип договора</label>
-                <select id="contract_type" required>
-                    <option value="">Выберите тип</option>
-                    <option value="Комиссия">Комиссия</option>
-                    <option value="Купля-продажа">Купля-продажа</option>
-                </select>
-            </div>
-
-            <!-- НОВОЕ: Выбор продавца (показывается только для купли-продажи) -->
-            <div class="input-group" id="seller_type_group" style="display:none;">
-                <label>Кто продает?</label>
-                <div class="seller-buttons">
-                    <button type="button" class="seller-btn" data-value="company">
-                        <div class="icon">🏢</div>
-                        <div class="text">ООО КЕНЛИТ АВТО<br>продает</div>
-                    </button>
-                    <button type="button" class="seller-btn" data-value="citizen">
-                        <div class="icon">👤</div>
-                        <div class="text">Гражданин<br>продает</div>
-                    </button>
-                </div>
-                <input type="hidden" id="seller_type" value="">
-            </div>
-
-            <!-- ФИО -->
-            <div class="input-group">
-                <label for="fio">ФИО (полностью)</label>
-                <input type="text" id="fio" placeholder="Иванов Иван Иванович" required>
-            </div>
-
-            <!-- Паспорт -->
-            <div class="input-group">
-                <label for="passport">Паспорт (серия номер)</label>
-                <input type="text" id="passport" placeholder="2003 123456" required>
-            </div>
-
-            <!-- Адрес -->
-            <div class="input-group">
-                <label for="address">Адрес регистрации</label>
-                <input type="text" id="address" placeholder="г. Москва, ул. Ленина, д. 1" required>
-            </div>
-
-            <!-- Телефон -->
-            <div class="input-group">
-                <label for="phone">Телефон</label>
-                <input type="tel" id="phone" placeholder="+7 (999) 123-45-67" required>
-            </div>
-
-            <!-- Автомобиль -->
-            <div class="input-group">
-                <label for="auto">Автомобиль (Марка Модель)</label>
-                <input type="text" id="auto" placeholder="BMW X5" required>
-            </div>
-
-            <!-- VIN -->
-            <div class="input-group">
-                <label for="vin">VIN номер</label>
-                <input type="text" id="vin" placeholder="WBAXXX1234567890" required>
-            </div>
-
-            <!-- Год выпуска -->
-            <div class="input-group">
-                <label for="year">Год выпуска</label>
-                <input type="number" id="year" placeholder="2023" min="1990" max="2025" required>
-            </div>
-
-            <!-- Цвет -->
-            <div class="input-group">
-                <label for="color">Цвет кузова</label>
-                <input type="text" id="color" placeholder="Черный" required>
-            </div>
-
-            <!-- Базовая цена -->
-            <div class="input-group">
-                <label for="base_price">Базовая цена (₽)</label>
-                <input type="number" id="base_price" placeholder="2000000" step="1000" required>
-            </div>
-
-            <!-- АКПП -->
-            <div class="input-group">
-                <label for="akpp_price">Доплата за АКПП (₽)</label>
-                <select id="akpp_price">
-                    <option value="0">Не установлена</option>
-                    <option value="100000">Вариант 1: +100 000 ₽</option>
-                    <option value="250000">Вариант 2: +250 000 ₽</option>
-                </select>
-            </div>
-
-            <!-- Новогодняя акция -->
-            <div class="checkbox-group">
-                <input type="checkbox" id="has_discount">
-                <label for="has_discount">🎄 Новогодняя акция -26%</label>
-            </div>
-
-            <!-- Срок рассрочки -->
-            <div class="input-group">
-                <label>Срок рассрочки (недели)</label>
-                <div class="week-selector">
-                    <button type="button" class="week-btn" data-weeks="1">
-                        <div class="weeks">1 неделя</div>
-                        <div class="rate">0%</div>
-                    </button>
-                    <button type="button" class="week-btn" data-weeks="2">
-                        <div class="weeks">2 недели</div>
-                        <div class="rate">5%</div>
-                    </button>
-                    <button type="button" class="week-btn" data-weeks="3">
-                        <div class="weeks">3 недели</div>
-                        <div class="rate">10%</div>
-                    </button>
-                    <button type="button" class="week-btn" data-weeks="4">
-                        <div class="weeks">4 недели</div>
-                        <div class="rate">15%</div>
-                    </button>
-                    <button type="button" class="week-btn" data-weeks="5">
-                        <div class="weeks">5 недель</div>
-                        <div class="rate">20%</div>
-                    </button>
-                    <button type="button" class="week-btn" data-weeks="6">
-                        <div class="weeks">6 недель</div>
-                        <div class="rate">25%</div>
-                    </button>
-                </div>
-                <input type="hidden" id="weeks" value="">
-            </div>
-
-            <!-- Итого -->
-            <div class="price-info" id="priceInfo" style="display:none;">
-                <div class="price-row">
-                    <span>Базовая цена:</span>
-                    <span id="display_base">0 ₽</span>
-                </div>
-                <div class="price-row">
-                    <span>Доплата АКПП:</span>
-                    <span id="display_akpp">0 ₽</span>
-                </div>
-                <div class="price-row">
-                    <span>Полная стоимость:</span>
-                    <span id="display_full">0 ₽</span>
-                </div>
-                <div class="price-row" id="discount_row" style="display:none;">
-                    <span>Скидка -26%:</span>
-                    <span id="display_discount" style="color: #10b981;">0 ₽</span>
-                </div>
-                <div class="price-row">
-                    <span>Первый взнос (50%):</span>
-                    <span id="display_down">0 ₽</span>
-                </div>
-                <div class="price-row">
-                    <span>Остаток в рассрочку:</span>
-                    <span id="display_loan">0 ₽</span>
-                </div>
-                <div class="price-row">
-                    <span>Процентная ставка:</span>
-                    <span id="display_rate">0%</span>
-                </div>
-                <div class="price-row">
-                    <span>Сумма процентов:</span>
-                    <span id="display_interest">0 ₽</span>
-                </div>
-                <div class="price-row total">
-                    <span>Итого к оплате:</span>
-                    <span id="display_total">0 ₽</span>
-                </div>
-                <div class="price-row total">
-                    <span>Еженедельный платеж:</span>
-                    <span id="display_weekly">0 ₽</span>
-                </div>
-            </div>
-        </form>
+  <div class="container">
+    <div class="header">
+      <h1>КЕНЛИТ АВТО</h1>
+      <p>Доброе утро</p>
     </div>
 
-    <script>
-        let tg = window.Telegram.WebApp;
-        tg.expand();
+    <div class="contract-type-section">
+      <div class="section-title">Тип договора</div>
+      <div class="contract-types">
+        <button type="button" class="contract-type-btn" data-type="sale">
+          <span class="icon">📄</span>
+          <span>Купли-продажи</span>
+        </button>
+        <button type="button" class="contract-type-btn" data-type="trade">
+          <span class="icon">🔄</span>
+          <span>Трейд-ин</span>
+        </button>
+        <button type="button" class="contract-type-btn" data-type="exchange">
+          <span class="icon">↔️</span>
+          <span>Обмен</span>
+        </button>
+        <button type="button" class="contract-type-btn" data-type="credit">
+          <span class="icon">💳</span>
+          <span>Автокредит</span>
+        </button>
+      </div>
+    </div>
 
-        const rates = {1: 0, 2: 5, 3: 10, 4: 15, 5: 20, 6: 25};
-        let selectedWeeks = null;
+    <!-- НОВОЕ: БЛОК ВЫБОРА ПРОДАВЦА -->
+    <div id="sellerBlock" style="display: none; margin-bottom: 32px;">
+      <div class="section-title">Кто продает?</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <button type="button" class="seller-btn" data-value="company">
+          <span style="font-size: 32px; margin-bottom: 8px;">🏢</span>
+          <span>ООО КЕНЛИТ АВТО<br>продает</span>
+        </button>
+        <button type="button" class="seller-btn" data-value="citizen">
+          <span style="font-size: 32px; margin-bottom: 8px;">👤</span>
+          <span>Гражданин<br>продает</span>
+        </button>
+      </div>
+      <input type="hidden" id="sellerType" value="">
+    </div>
 
-        // НОВОЕ: Показать/скрыть выбор продавца
-        document.getElementById('contract_type').addEventListener('change', function() {
-            const sellerGroup = document.getElementById('seller_type_group');
-            if (this.value === 'Купля-продажа') {
-                sellerGroup.style.display = 'block';
-            } else {
-                sellerGroup.style.display = 'none';
-                document.getElementById('seller_type').value = '';
-                document.querySelectorAll('.seller-btn').forEach(btn => btn.classList.remove('active'));
-            }
-        });
+    <form id="form">
+      <div class="form-group">
+        <label>ФИО клиента (только кириллица)</label>
+        <input type="text" id="fio" placeholder="Иванов Иван Иванович" required>
+        <small>Используйте только русские буквы</small>
+      </div>
 
-        // НОВОЕ: Обработка кнопок выбора продавца
-        document.querySelectorAll('.seller-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.seller-btn').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                document.getElementById('seller_type').value = this.dataset.value;
-            });
-        });
+      <div class="form-group">
+        <label>Телефон (6 цифр)</label>
+        <input type="tel" id="phone" placeholder="333-333" pattern="[0-9]{3}-[0-9]{3}" required>
+        <small>Формат: 333-333</small>
+      </div>
 
-        // Выбор недель
-        document.querySelectorAll('.week-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.week-btn').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                selectedWeeks = parseInt(this.dataset.weeks);
-                document.getElementById('weeks').value = selectedWeeks;
-                calculate();
-            });
-        });
+      <div class="form-group">
+        <label>Марка и модель</label>
+        <input type="text" id="carModel" placeholder="Toyota Camry" required>
+        <small>Только английские буквы и цифры</small>
+      </div>
 
-        // Пересчет при изменении полей
-        document.getElementById('base_price').addEventListener('input', calculate);
-        document.getElementById('akpp_price').addEventListener('change', calculate);
-        document.getElementById('has_discount').addEventListener('change', calculate);
+      <div class="form-group">
+        <label>VIN номер (17 символов)</label>
+        <input type="text" id="vin" placeholder="WBADT43452G123456" maxlength="17" required>
+        <small>17 символов</small>
+      </div>
 
-        function calculate() {
-            if (!selectedWeeks) return;
+      <div class="form-group">
+        <label>Базовая цена</label>
+        <input type="number" id="basePrice" placeholder="2000000" step="1000" required>
+      </div>
 
-            const basePrice = parseFloat(document.getElementById('base_price').value) || 0;
-            const akppPrice = parseFloat(document.getElementById('akpp_price').value) || 0;
-            const hasDiscount = document.getElementById('has_discount').checked;
+      <div class="form-group">
+        <label>Доплата за АКПП</label>
+        <div class="akpp-options">
+          <div class="akpp-option" data-price="0">Нет</div>
+          <div class="akpp-option" data-price="100000">100 000 ₽</div>
+          <div class="akpp-option" data-price="250000">250 000 ₽</div>
+        </div>
+        <input type="hidden" id="akppPrice" value="0">
+      </div>
 
-            let fullPrice = basePrice + akppPrice;
-            let discountAmount = 0;
+      <div class="discount-banner">
+        <input type="checkbox" id="discount">
+        <label for="discount">🎄 Новогодняя скидка 26%</label>
+        <span class="discount-badge">-26%</span>
+      </div>
 
-            if (hasDiscount) {
-                discountAmount = Math.round(fullPrice * 0.26);
-                fullPrice -= discountAmount;
-            }
+      <div class="form-group">
+        <label>Срок рассрочки</label>
+        <div class="weeks-grid">
+          <button type="button" class="week-btn" data-weeks="1">
+            <span class="week-number">1 нед</span>
+            <span class="rate">0%</span>
+          </button>
+          <button type="button" class="week-btn" data-weeks="2">
+            <span class="week-number">2 нед</span>
+            <span class="rate">5%</span>
+          </button>
+          <button type="button" class="week-btn" data-weeks="3">
+            <span class="week-number">3 нед</span>
+            <span class="rate">10%</span>
+          </button>
+          <button type="button" class="week-btn" data-weeks="4">
+            <span class="week-number">4 нед</span>
+            <span class="rate">15%</span>
+          </button>
+          <button type="button" class="week-btn" data-weeks="5">
+            <span class="week-number">5 нед</span>
+            <span class="rate">20%</span>
+          </button>
+          <button type="button" class="week-btn" data-weeks="6">
+            <span class="week-number">6 нед</span>
+            <span class="rate">25%</span>
+          </button>
+        </div>
+        <div class="rate-display">Процентная ставка: <span id="rateDisplay">0%</span></div>
+        <input type="hidden" id="weeks" value="">
+      </div>
 
-            const downPayment = Math.round(fullPrice * 0.5);
-            const loanBody = fullPrice - downPayment;
-            const ratePercent = rates[selectedWeeks];
-            const interestSum = Math.round(loanBody * (ratePercent / 100));
-            const totalDebt = loanBody + interestSum;
-            const weeklyPayment = Math.round(totalDebt / selectedWeeks);
+      <div class="calculation" id="calculation" style="display: none;">
+        <h3>Расчет платежей</h3>
+        <div class="calc-row">
+          <span>Полная стоимость:</span>
+          <span id="fullPrice">0 ₽</span>
+        </div>
+        <div class="calc-row">
+          <span>Первый взнос (50%):</span>
+          <span id="downPayment">0 ₽</span>
+        </div>
+        <div class="calc-row">
+          <span>Сумма в рассрочку:</span>
+          <span id="loanAmount">0 ₽</span>
+        </div>
+        <div class="calc-row discount" id="discountRow" style="display: none;">
+          <span>🎄 Новогодняя скидка -26%:</span>
+          <span id="discountAmount">0 ₽</span>
+        </div>
+        <div class="calc-row">
+          <span>Еженедельно:</span>
+          <span id="weeklyPayment">0 ₽</span>
+        </div>
+      </div>
 
-            // Отображение
-            document.getElementById('display_base').textContent = formatPrice(basePrice);
-            document.getElementById('display_akpp').textContent = formatPrice(akppPrice);
-            document.getElementById('display_full').textContent = formatPrice(fullPrice);
-            document.getElementById('display_down').textContent = formatPrice(downPayment);
-            document.getElementById('display_loan').textContent = formatPrice(loanBody);
-            document.getElementById('display_rate').textContent = ratePercent + '%';
-            document.getElementById('display_interest').textContent = formatPrice(interestSum);
-            document.getElementById('display_total').textContent = formatPrice(totalDebt);
-            document.getElementById('display_weekly').textContent = formatPrice(weeklyPayment);
+      <button type="submit" class="submit-btn">✅ Отправить данные</button>
+    </form>
+  </div>
 
-            if (hasDiscount) {
-                document.getElementById('discount_row').style.display = 'flex';
-                document.getElementById('display_discount').textContent = '-' + formatPrice(discountAmount);
-            } else {
-                document.getElementById('discount_row').style.display = 'none';
-            }
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
 
-            document.getElementById('priceInfo').style.display = 'block';
+    const rates = {1: 0, 2: 5, 3: 10, 4: 15, 5: 20, 6: 25};
+    let selectedType = '';
+    let selectedWeeks = 0;
+    let selectedAkpp = 0;
+    let sellerType = 'citizen'; // НОВОЕ: тип продавца по умолчанию
+
+    // Выбор типа договора
+    document.querySelectorAll('.contract-type-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.contract-type-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        selectedType = this.dataset.type;
+        
+        // НОВОЕ: Показать/скрыть блок продавца для купли-продажи
+        const sellerBlock = document.getElementById('sellerBlock');
+        if (selectedType === 'sale') {
+          sellerBlock.style.display = 'block';
+        } else {
+          sellerBlock.style.display = 'none';
+          document.getElementById('sellerType').value = '';
+          sellerType = 'citizen';
+          document.querySelectorAll('.seller-btn').forEach(b => b.classList.remove('active'));
         }
+      });
+    });
 
-        function formatPrice(num) {
-            return new Intl.NumberFormat('ru-RU').format(num) + ' ₽';
-        }
+    // НОВОЕ: Обработка кнопок выбора продавца
+    document.querySelectorAll('.seller-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.seller-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        sellerType = this.dataset.value;
+        document.getElementById('sellerType').value = sellerType;
+      });
+    });
 
-        // Кнопка "Отправить"
-        tg.MainButton.setText('Отправить данные');
-        tg.MainButton.show();
-        tg.MainButton.onClick(function() {
-            const contractType = document.getElementById('contract_type').value;
-            const sellerType = document.getElementById('seller_type').value;
+    // Выбор АКПП
+    document.querySelectorAll('.akpp-option').forEach(opt => {
+      opt.addEventListener('click', function() {
+        document.querySelectorAll('.akpp-option').forEach(o => o.classList.remove('active'));
+        this.classList.add('active');
+        selectedAkpp = parseInt(this.dataset.price);
+        document.getElementById('akppPrice').value = selectedAkpp;
+        calculate();
+      });
+    });
 
-            // НОВОЕ: Проверка для купли-продажи
-            if (contractType === 'Купля-продажа' && !sellerType) {
-                tg.showAlert('⚠️ Выберите, кто является продавцом!');
-                return;
-            }
+    // Выбор срока
+    document.querySelectorAll('.week-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        selectedWeeks = parseInt(this.dataset.weeks);
+        document.getElementById('weeks').value = selectedWeeks;
+        document.getElementById('rateDisplay').textContent = rates[selectedWeeks] + '%';
+        calculate();
+      });
+    });
 
-            if (!selectedWeeks) {
-                tg.showAlert('⚠️ Выберите срок рассрочки!');
-                return;
-            }
+    // Пересчет
+    document.getElementById('basePrice').addEventListener('input', calculate);
+    document.getElementById('discount').addEventListener('change', calculate);
 
-            const basePrice = parseFloat(document.getElementById('base_price').value) || 0;
-            const akppPrice = parseFloat(document.getElementById('akpp_price').value) || 0;
-            const hasDiscount = document.getElementById('has_discount').checked;
+    function calculate() {
+      if (!selectedWeeks) return;
 
-            let fullPrice = basePrice + akppPrice;
-            let discountAmount = 0;
+      const basePrice = parseInt(document.getElementById('basePrice').value) || 0;
+      let fullPrice = basePrice + selectedAkpp;
+      const hasDiscount = document.getElementById('discount').checked;
 
-            if (hasDiscount) {
-                discountAmount = Math.round(fullPrice * 0.26);
-                fullPrice -= discountAmount;
-            }
+      let discountAmount = 0;
+      if (hasDiscount) {
+        discountAmount = Math.round(fullPrice * 0.26);
+        fullPrice -= discountAmount;
+      }
 
-            const downPayment = Math.round(fullPrice * 0.5);
-            const loanBody = fullPrice - downPayment;
-            const ratePercent = rates[selectedWeeks];
-            const interestSum = Math.round(loanBody * (ratePercent / 100));
-            const totalDebt = loanBody + interestSum;
-            const weeklyPayment = Math.round(totalDebt / selectedWeeks);
+      const downPayment = Math.round(fullPrice * 0.5);
+      const loanAmount = fullPrice - downPayment;
+      const rate = rates[selectedWeeks];
+      const interest = Math.round(loanAmount * (rate / 100));
+      const totalDebt = loanAmount + interest;
+      const weeklyPayment = Math.round(totalDebt / selectedWeeks);
 
-            const data = {
-                contract_type: contractType,
-                seller_type: sellerType || 'citizen',  // НОВОЕ ПОЛЕ
-                fio: document.getElementById('fio').value,
-                passport: document.getElementById('passport').value,
-                address: document.getElementById('address').value,
-                phone: document.getElementById('phone').value,
-                auto: document.getElementById('auto').value,
-                vin: document.getElementById('vin').value,
-                year: document.getElementById('year').value,
-                color: document.getElementById('color').value,
-                base_price: basePrice,
-                akpp_price: akppPrice,
-                full_price: fullPrice,
-                down_payment: downPayment,
-                loan_body: loanBody,
-                rate_percent: ratePercent,
-                interest_sum: interestSum,
-                has_discount: hasDiscount,
-                discount_amount: discountAmount,
-                weeks: selectedWeeks,
-                total_debt: totalDebt,
-                weekly_payment: weeklyPayment
-            };
+      document.getElementById('fullPrice').textContent = fullPrice.toLocaleString('ru-RU') + ' ₽';
+      document.getElementById('downPayment').textContent = downPayment.toLocaleString('ru-RU') + ' ₽';
+      document.getElementById('loanAmount').textContent = loanAmount.toLocaleString('ru-RU') + ' ₽';
+      document.getElementById('weeklyPayment').textContent = weeklyPayment.toLocaleString('ru-RU') + ' ₽';
 
-            tg.sendData(JSON.stringify(data));
-        });
-    </script>
+      const discountRow = document.getElementById('discountRow');
+      if (hasDiscount) {
+        document.getElementById('discountAmount').textContent = '-' + discountAmount.toLocaleString('ru-RU') + ' ₽';
+        discountRow.style.display = 'flex';
+      } else {
+        discountRow.style.display = 'none';
+      }
+
+      document.getElementById('calculation').style.display = 'block';
+    }
+
+    // Отправка формы
+    document.getElementById('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // НОВОЕ: Проверка выбора продавца для купли-продажи
+      if (selectedType === 'sale' && !sellerType) {
+        tg.showAlert('⚠️ Выберите, кто является продавцом!');
+        return;
+      }
+
+      if (!selectedType) {
+        tg.showAlert('⚠️ Выберите тип договора!');
+        return;
+      }
+
+      if (!selectedWeeks) {
+        tg.showAlert('⚠️ Выберите срок рассрочки!');
+        return;
+      }
+
+      const basePrice = parseInt(document.getElementById('basePrice').value) || 0;
+      let fullPrice = basePrice + selectedAkpp;
+      const hasDiscount = document.getElementById('discount').checked;
+
+      let discountAmount = 0;
+      if (hasDiscount) {
+        discountAmount = Math.round(fullPrice * 0.26);
+        fullPrice -= discountAmount;
+      }
+
+      const downPayment = Math.round(fullPrice * 0.5);
+      const loanAmount = fullPrice - downPayment;
+      const rate = rates[selectedWeeks];
+      const interest = Math.round(loanAmount * (rate / 100));
+      const totalDebt = loanAmount + interest;
+      const weeklyPayment = Math.round(totalDebt / selectedWeeks);
+
+      const data = {
+        contract_type: selectedType === 'sale' ? 'Купля-продажа' : selectedType === 'trade' ? 'Трейд-ин' : selectedType === 'exchange' ? 'Обмен' : 'Автокредит',
+        seller_type: sellerType, // НОВОЕ ПОЛЕ
+        fio: document.getElementById('fio').value,
+        phone: document.getElementById('phone').value,
+        auto: document.getElementById('carModel').value,
+        vin: document.getElementById('vin').value,
+        base_price: basePrice,
+        akpp_price: selectedAkpp,
+        full_price: fullPrice,
+        down_payment: downPayment,
+        loan_body: loanAmount,
+        rate_percent: rate,
+        interest_sum: interest,
+        has_discount: hasDiscount,
+        discount_amount: discountAmount,
+        weeks: selectedWeeks,
+        total_debt: totalDebt,
+        weekly_payment: weeklyPayment
+      };
+
+      tg.sendData(JSON.stringify(data));
+    });
+  </script>
 </body>
 </html>
