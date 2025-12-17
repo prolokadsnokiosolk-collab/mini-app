@@ -3,698 +3,118 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>КЕНЛИТ АВТО</title>
+  <title>ТЕСТ ОТПРАВКИ</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
-      font-family: 'Montserrat', -apple-system, sans-serif;
-      background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 50%, #0d0d0d 100%);
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    .container {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 24px 20px 120px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 32px;
-      padding: 32px 20px 24px;
-      background: linear-gradient(135deg, rgba(139,128,107,.15) 0%, rgba(95,87,73,.1) 100%);
-      border-radius: 24px;
-      border: 1px solid rgba(218,197,164,.2);
-      backdrop-filter: blur(10px);
-    }
-
-    .header h1 {
-      font-size: 32px;
-      font-weight: 800;
-      color: #dac5a4;
-      margin-bottom: 8px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-shadow: 0 2px 10px rgba(218,197,164,.3);
-    }
-
-    .header p {
-      color: rgba(218,197,164,.8);
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 1px;
-    }
-
-    .contract-type-section {
-      margin-bottom: 32px;
-    }
-
-    .section-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: rgba(218,197,164,.8);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-
-    .contract-types {
-      display: grid;
-      grid-template-columns: repeat(2,1fr);
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .contract-type-btn {
-      padding: 20px 12px;
-      background: rgba(255,255,255,.03);
-      border: 2px solid rgba(218,197,164,.2);
-      border-radius: 16px;
-      cursor: pointer;
-      transition: all .3s ease;
-      text-align: center;
-    }
-
-    .contract-type-btn.active {
-      background: linear-gradient(135deg,rgba(218,197,164,.25) 0%,rgba(139,128,107,.2) 100%);
-      border-color: #dac5a4;
-      box-shadow: 0 8px 24px rgba(218,197,164,.3);
-      transform: translateY(-2px);
-    }
-
-    .contract-type-icon {
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
-
-    .contract-type-name {
-      font-size: 13px;
-      font-weight: 600;
-      color: rgba(255,255,255,.5);
-    }
-
-    .contract-type-btn.active .contract-type-name { color: #dac5a4; }
-
-    .form-group {
-      margin-bottom: 20px;
-      position: relative;
-    }
-
-    label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 10px;
-      font-size: 12px;
-      color: rgba(218,197,164,.7);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    input {
-      width: 100%;
-      padding: 16px 18px;
-      border: 1.5px solid rgba(218,197,164,.15);
-      border-radius: 14px;
-      font-size: 15px;
-      background: rgba(255,255,255,.02);
-      color: rgba(255,255,255,.9);
-      transition: all .3s ease;
-      font-weight: 400;
-      font-family: 'Montserrat', sans-serif;
-    }
-
-    input::placeholder {
-      color: rgba(255,255,255,.2);
-      font-weight: 300;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: rgba(218,197,164,.5);
-      background: rgba(255,255,255,.04);
-      box-shadow: 0 4px 16px rgba(218,197,164,.15);
-    }
-
-    input.error {
-      border-color: rgba(255,100,100,.5);
-    }
-
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    input[type=number] {
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
-
-    .error-message {
-      font-size: 11px;
-      color: rgba(255,100,100,.8);
-      margin-top: 6px;
-      display: none;
-    }
-
-    .button-group {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .choice-btn {
-      flex: 1;
-      min-width: calc(50% - 5px);
-      padding: 14px 16px;
-      background: rgba(255,255,255,.03);
-      border: 1.5px solid rgba(218,197,164,.2);
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all .3s ease;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 600;
-      color: rgba(255,255,255,.6);
-    }
-
-    .choice-btn.active {
-      background: rgba(218,197,164,.2);
-      border-color: #dac5a4;
-      color: #dac5a4;
-      box-shadow: 0 4px 12px rgba(218,197,164,.2);
-    }
-
-    .discount-btn {
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, rgba(255,50,50,0.15) 0%, rgba(139,128,107,0.1) 100%);
-      border: 2px solid rgba(255,100,100,0.3);
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all .3s ease;
-      text-align: center;
-      font-size: 15px;
-      font-weight: 700;
-      color: rgba(255,255,255,.6);
-      margin-top: 12px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .discount-btn::before {
-      content: '🎄';
-      position: absolute;
-      left: 16px;
-      font-size: 20px;
-    }
-
-    .discount-btn::after {
-      content: '🎅';
-      position: absolute;
-      right: 16px;
-      font-size: 20px;
-    }
-
-    .discount-btn.active {
-      background: linear-gradient(135deg, rgba(255,50,50,0.3) 0%, rgba(218,197,164,0.2) 100%);
-      border-color: #ff6b6b;
-      color: #ff6b6b;
-      box-shadow: 0 8px 24px rgba(255,100,100,.4);
-      transform: translateY(-2px);
-    }
-
-    .discount-badge {
-      font-size: 18px;
-      font-weight: 800;
-      color: #ff6b6b;
-    }
-
-    .weeks-group {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 8px;
-    }
-
-    .week-btn {
-      padding: 12px 8px;
-      background: rgba(255,255,255,.03);
-      border: 1.5px solid rgba(218,197,164,.2);
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all .3s ease;
-      text-align: center;
-      font-size: 13px;
-      font-weight: 600;
-      color: rgba(255,255,255,.6);
-    }
-
-    .week-btn.active {
-      background: rgba(218,197,164,.2);
-      border-color: #dac5a4;
-      color: #dac5a4;
-      box-shadow: 0 4px 12px rgba(218,197,164,.2);
-    }
-
-    .rate-info {
-      display: block;
-      margin-top: 12px;
-      padding: 10px 14px;
-      background: rgba(218,197,164,.08);
-      border: 1px solid rgba(218,197,164,.15);
-      border-radius: 10px;
-      text-align: center;
-      font-size: 12px;
-      color: rgba(218,197,164,.6);
-    }
-
-    #rate {
-      font-weight: 700;
-      color: #dac5a4;
+      background: #000;
+      color: #0f0;
+      padding: 20px;
+      font-family: monospace;
       font-size: 16px;
-      margin-left: 4px;
     }
-
-    .summary {
-      background: linear-gradient(135deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,.3) 100%);
-      border: 1.5px solid rgba(218,197,164,.25);
+    .btn {
+      background: #4CAF50;
       color: white;
-      padding: 24px;
-      border-radius: 20px;
-      margin: 28px 0 20px;
-      box-shadow: 0 12px 32px rgba(0,0,0,.4);
-    }
-
-    .summary h3 {
-      margin-bottom: 20px;
-      font-size: 16px;
-      text-align: center;
-      font-weight: 700;
-      color: #dac5a4;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 14px;
-      font-size: 14px;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(218,197,164,.1);
-    }
-
-    .summary-row span { color: rgba(255,255,255,.5); }
-    .summary-row strong { color: rgba(255,255,255,.9); font-weight: 600; }
-
-    .summary-row.discount-row span { color: rgba(255,100,100,.7); }
-    .summary-row.discount-row strong { color: #ff6b6b; font-weight: 700; }
-
-    .highlight {
-      font-size: 28px !important;
-      color: #dac5a4 !important;
-      font-weight: 700 !important;
-      text-shadow: 0 0 20px rgba(218,197,164,.4);
-    }
-
-    .divider {
-      height: 1.5px;
-      background: linear-gradient(90deg,transparent,rgba(218,197,164,.4),transparent);
-      margin: 16px 0;
-    }
-
-    .snow-container {
-      position: fixed;
-      inset: 0;
+      padding: 20px 40px;
+      border: none;
+      border-radius: 10px;
+      font-size: 20px;
+      margin: 10px;
+      cursor: pointer;
       width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9999;
-      overflow: hidden;
     }
-
-    .snowflake {
-      position: absolute;
-      color: rgba(255,255,255,0.7);
-      font-size: 14px;
-      animation: fall linear infinite;
-    }
-
-    @keyframes fall {
-      0%   { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
-      10%  { opacity: 1; }
-      90%  { opacity: 1; }
-      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    .log {
+      background: #222;
+      padding: 10px;
+      margin: 10px 0;
+      border-left: 3px solid #0f0;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>КЕНЛИТ АВТО</h1>
-      <p id="greeting">Доброе утро</p>
-    </div>
-
-    <div class="contract-type-section">
-      <div class="section-title">Тип договора</div>
-      <div class="contract-types">
-        <div class="contract-type-btn" data-type="sale">
-          <div class="contract-type-icon">📄</div>
-          <div class="contract-type-name">Купли-продажи</div>
-        </div>
-        <div class="contract-type-btn" data-type="tradein">
-          <div class="contract-type-icon">🔄</div>
-          <div class="contract-type-name">Трейд-ин</div>
-        </div>
-        <div class="contract-type-btn" data-type="exchange">
-          <div class="contract-type-icon">↔️</div>
-          <div class="contract-type-name">Обмен</div>
-        </div>
-        <div class="contract-type-btn" data-type="credit">
-          <div class="contract-type-icon">💳</div>
-          <div class="contract-type-name">Автокредит</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group" id="seller-block" style="display:none;">
-      <label>Кто является продавцом?</label>
-      <div class="button-group">
-        <div class="choice-btn seller-choice" data-seller="company">ООО КЕНЛИТ АВТО продает</div>
-        <div class="choice-btn seller-choice" data-seller="citizen">Гражданин продает</div>
-      </div>
-    </div>
-
-    <form id="form">
-      <div class="form-group">
-        <label>ФИО клиента (только кириллица)</label>
-        <input type="text" id="fio" required placeholder="Иванов Иван Иванович">
-        <div class="error-message" id="fio-error">Используйте только русские буквы</div>
-      </div>
-
-      <div class="form-group">
-        <label>Телефон (6 цифр)</label>
-        <input type="text" id="phone" required placeholder="333-333" maxlength="7">
-        <div class="error-message" id="phone-error">Формат: 333-333</div>
-      </div>
-
-      <div class="form-group">
-        <label>Марка и модель</label>
-        <input type="text" id="auto" required placeholder="Toyota Camry">
-        <div class="error-message" id="auto-error">Только английские буквы и цифры</div>
-      </div>
-
-      <div class="form-group">
-        <label>VIN номер (17 символов)</label>
-        <input type="text" id="vin" required placeholder="WVWZZZ1KZBW123456" maxlength="17">
-        <div class="error-message" id="vin-error">17 символов</div>
-      </div>
-
-      <div class="form-group">
-        <label>Базовая цена</label>
-        <input type="number" id="base_price" required placeholder="500000" min="0">
-      </div>
-
-      <div class="form-group">
-        <label>Доплата за АКПП</label>
-        <div class="button-group">
-          <div class="choice-btn active" data-akpp="0">Нет</div>
-          <div class="choice-btn" data-akpp="100000">100 000 ₽</div>
-          <div class="choice-btn" data-akpp="250000">250 000 ₽</div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>🎄 Новогодняя скидка 26%</label>
-        <div class="discount-btn" id="discount-btn">
-          <span class="discount-badge">-26%</span> НОВОГОДНЯЯ СКИДКА
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Срок рассрочки</label>
-        <div class="weeks-group">
-          <div class="week-btn active" data-weeks="1">1 нед</div>
-          <div class="week-btn" data-weeks="2">2 нед</div>
-          <div class="week-btn" data-weeks="3">3 нед</div>
-          <div class="week-btn" data-weeks="4">4 нед</div>
-          <div class="week-btn" data-weeks="5">5 нед</div>
-          <div class="week-btn" data-weeks="6">6 нед</div>
-        </div>
-        <small class="rate-info">Процентная ставка:<span id="rate">0%</span></small>
-      </div>
-
-      <div class="summary">
-        <h3>Расчет платежей</h3>
-        <div class="summary-row">
-          <span>Полная стоимость:</span>
-          <strong id="full_price">0 ₽</strong>
-        </div>
-        <div class="summary-row">
-          <span>Первый взнос (50%):</span>
-          <strong id="down_payment">0 ₽</strong>
-        </div>
-        <div class="divider"></div>
-        <div class="summary-row">
-          <span>Сумма в рассрочку:</span>
-          <strong id="loan_body">0 ₽</strong>
-        </div>
-        <div class="summary-row discount-row" id="discount-row" style="display:none;">
-          <span>🎄 Новогодняя скидка -26%:</span>
-          <strong id="discount_amount">0 ₽</strong>
-        </div>
-        <div class="summary-row">
-          <span>Еженедельно:</span>
-          <strong id="weekly_payment" class="highlight">0 ₽</strong>
-        </div>
-      </div>
-    </form>
-  </div>
-
-  <div class="snow-container" id="snowContainer"></div>
-
+  
+  <h1>🧪 ТЕСТ ОТПРАВКИ ДАННЫХ</h1>
+  <div id="log"></div>
+  
+  <button class="btn" onclick="testSend()">📤 ОТПРАВИТЬ ТЕСТОВЫЕ ДАННЫЕ</button>
+  
   <script>
-    var RATES = {1:0,2:5,3:10,4:15,5:20,6:25};
     var tg = window.Telegram.WebApp;
-    var selectedType = null;
-    var selectedAkpp = 0;
-    var selectedWeeks = 1;
-    var hasDiscount = false;
-    var sellerType = null;
-
+    var logDiv = document.getElementById('log');
+    
+    function addLog(msg) {
+      var p = document.createElement('div');
+      p.className = 'log';
+      p.innerHTML = msg;
+      logDiv.appendChild(p);
+    }
+    
     tg.ready();
     tg.expand();
-
-    function getGreeting() {
-      var h = new Date().getHours();
-      if (h < 6 || h >= 22) return "Доброй ночи";
-      if (h < 11) return "Доброе утро";
-      if (h < 17) return "Добрый день";
-      return "Добрый вечер";
-    }
-    document.getElementById('greeting').textContent = getGreeting();
-
-    function createSnowflakes() {
-      var container = document.getElementById('snowContainer');
-      for (var i = 0; i < 30; i++) {
-        var s = document.createElement('div');
-        s.className = 'snowflake';
-        s.innerHTML = ['❄','❅','❆'][Math.floor(Math.random()*3)];
-        s.style.left = Math.random()*100 + '%';
-        s.style.animationDuration = (Math.random()*3 + 8) + 's';
-        s.style.animationDelay = Math.random()*5 + 's';
-        s.style.fontSize = (Math.random()*10 + 10) + 'px';
-        s.style.opacity = Math.random()*0.6 + 0.4;
-        container.appendChild(s);
-      }
-    }
-    createSnowflakes();
-
-    var contractBtns = document.querySelectorAll('.contract-type-btn');
-    for (var i = 0; i < contractBtns.length; i++) {
-      contractBtns[i].onclick = function(){
-        for (var j = 0; j < contractBtns.length; j++) contractBtns[j].classList.remove('active');
-        this.classList.add('active');
-        selectedType = this.getAttribute('data-type');
-        var sellerBlock = document.getElementById('seller-block');
-        if (selectedType === 'sale') {
-          sellerBlock.style.display = 'block';
-        } else {
-          sellerBlock.style.display = 'none';
-          sellerType = null;
-          var sellerChoices = document.querySelectorAll('.seller-choice');
-          for (var k = 0; k < sellerChoices.length; k++) sellerChoices[k].classList.remove('active');
-        }
-      };
-    }
-
-    var sellerChoices = document.querySelectorAll('.seller-choice');
-    for (var i = 0; i < sellerChoices.length; i++) {
-      sellerChoices[i].onclick = function(){
-        for (var j = 0; j < sellerChoices.length; j++) sellerChoices[j].classList.remove('active');
-        this.classList.add('active');
-        sellerType = this.getAttribute('data-seller');
-      };
-    }
-
-    var choiceBtns = document.querySelectorAll('.choice-btn');
-    for (var i = 0; i < choiceBtns.length; i++) {
-      if (!choiceBtns[i].classList.contains('seller-choice')) {
-        choiceBtns[i].onclick = function(){
-          for (var j = 0; j < choiceBtns.length; j++) {
-            if (!choiceBtns[j].classList.contains('seller-choice')) choiceBtns[j].classList.remove('active');
-          }
-          this.classList.add('active');
-          selectedAkpp = parseInt(this.getAttribute('data-akpp'));
-          calc();
-        };
-      }
-    }
-
-    document.getElementById('discount-btn').onclick = function(){
-      this.classList.toggle('active');
-      hasDiscount = this.classList.contains('active');
-      calc();
-    };
-
-    var weekBtns = document.querySelectorAll('.week-btn');
-    for (var i = 0; i < weekBtns.length; i++) {
-      weekBtns[i].onclick = function(){
-        for (var j = 0; j < weekBtns.length; j++) weekBtns[j].classList.remove('active');
-        this.classList.add('active');
-        selectedWeeks = parseInt(this.getAttribute('data-weeks'));
-        calc();
-      };
-    }
-
-    function sanitize(str) {
-      return str.replace(/[<>"'`\\/;{}()]/g, '');
-    }
-
-    function fmt(n){ return Math.round(n).toLocaleString('ru-RU'); }
-
-    function calc(){
-      var bp = parseFloat(document.getElementById('base_price').value) || 0;
-      var ap = selectedAkpp;
-      var w  = selectedWeeks;
-      var fp = bp + ap;
-      var dp = fp * 0.5;
-      var lb = fp - dp;
-      var rp = RATES[w] || 0;
-      var is = lb * (rp / 100);
-      var td = lb + is;
-      var discountAmount = 0;
-
-      if (hasDiscount) {
-        discountAmount = td * 0.26;
-        td = td - discountAmount;
-        document.getElementById('discount-row').style.display = 'flex';
-        document.getElementById('discount_amount').textContent = '- ' + fmt(discountAmount) + ' ₽';
-      } else {
-        document.getElementById('discount-row').style.display = 'none';
-      }
-
-      var wp = w > 0 ? td / w : 0;
-
-      document.getElementById('rate').textContent = rp + '%';
-      document.getElementById('full_price').textContent = fmt(fp) + ' ₽';
-      document.getElementById('down_payment').textContent = fmt(dp) + ' ₽';
-      document.getElementById('loan_body').textContent = fmt(lb) + ' ₽';
-      document.getElementById('weekly_payment').textContent = fmt(wp) + ' ₽';
-
-      return {
-        base_price: bp,
-        akpp_price: ap,
-        full_price: fp,
-        down_payment: dp,
-        loan_body: lb,
-        rate_percent: rp,
-        interest_sum: is,
-        has_discount: hasDiscount,
-        discount_amount: discountAmount,
-        total_debt: td,
-        weeks: w,
-        weekly_payment: wp
-      };
-    }
-
-    document.getElementById('base_price').oninput = calc;
-    calc();
-
-    // РАБОЧАЯ КНОПКА
-    tg.MainButton.setText('✅ ОТПРАВИТЬ ДАННЫЕ');
-    tg.MainButton.color = '#dac5a4';
-    tg.MainButton.textColor = '#1a1a1a';
+    
+    addLog('✅ 1. WebApp инициализирован');
+    addLog('✅ 2. Версия: ' + (tg.version || 'неизвестно'));
+    addLog('✅ 3. Platform: ' + (tg.platform || 'неизвестно'));
+    
+    // Показываем MainButton
+    tg.MainButton.setText('📤 ОТПРАВИТЬ ЧЕРЕЗ MAINBUTTON');
+    tg.MainButton.color = '#4CAF50';
+    tg.MainButton.textColor = '#FFFFFF';
     tg.MainButton.show();
-
+    
+    addLog('✅ 4. MainButton показан');
+    
+    // Обработчик MainButton
     tg.MainButton.onClick(function(){
-      var fio  = sanitize(document.getElementById('fio').value.trim());
-      var phone= document.getElementById('phone').value.trim();
-      var auto = sanitize(document.getElementById('auto').value.trim());
-      var vin  = document.getElementById('vin').value.trim().toUpperCase();
-      var base = parseFloat(document.getElementById('base_price').value);
-
-      if (!selectedType) {
-        tg.showAlert('❌ Выберите тип договора');
-        return;
-      }
-      if (!fio || !/^[А-Яа-яЁё\s-]+$/.test(fio)) {
-        tg.showAlert('❌ Проверьте ФИО');
-        return;
-      }
-      if (phone.length !== 7 || !phone.includes('-')) {
-        tg.showAlert('❌ Телефон: 333-333');
-        return;
-      }
-      if (!auto || !/^[A-Za-z0-9\s-]+$/.test(auto)) {
-        tg.showAlert('❌ Проверьте марку авто');
-        return;
-      }
-      if (vin.length !== 17 || !/^[A-Z0-9]+$/.test(vin)) {
-        tg.showAlert('❌ VIN: 17 символов');
-        return;
-      }
-      if (!base || base <= 0) {
-        tg.showAlert('❌ Укажите цену');
-        return;
-      }
-      if (selectedType === 'sale' && !sellerType) {
-        tg.showAlert('❌ Выберите, кто является продавцом');
-        return;
-      }
-
-      var calcData = calc();
-      var data = {
-        contract_type: selectedType,
-        seller_type: sellerType || 'citizen',
-        fio: fio,
-        phone: phone,
-        auto: auto,
-        vin: vin,
-        base_price: calcData.base_price,
-        akpp_price: calcData.akpp_price,
-        full_price: calcData.full_price,
-        down_payment: calcData.down_payment,
-        loan_body: calcData.loan_body,
-        rate_percent: calcData.rate_percent,
-        interest_sum: calcData.interest_sum,
-        has_discount: calcData.has_discount,
-        discount_amount: calcData.discount_amount,
-        total_debt: calcData.total_debt,
-        weeks: calcData.weeks,
-        weekly_payment: calcData.weekly_payment
-      };
-
-      tg.sendData(JSON.stringify(data));
+      addLog('🎯 5. MainButton НАЖАТ!');
+      sendData();
     });
+    
+    addLog('✅ 6. Обработчик установлен');
+    
+    function testSend() {
+      addLog('🎯 Кнопка "ОТПРАВИТЬ" нажата!');
+      sendData();
+    }
+    
+    function sendData() {
+      var testData = {
+        contract_type: 'sale',
+        seller_type: 'company',
+        fio: 'Тестов Тест Тестович',
+        phone: '123-456',
+        auto: 'Test Car',
+        vin: 'TEST12345678901XX',
+        base_price: 500000,
+        akpp_price: 0,
+        full_price: 500000,
+        down_payment: 250000,
+        loan_body: 250000,
+        rate_percent: 0,
+        interest_sum: 0,
+        has_discount: false,
+        discount_amount: 0,
+        total_debt: 250000,
+        weeks: 1,
+        weekly_payment: 250000
+      };
+      
+      var jsonString = JSON.stringify(testData);
+      
+      addLog('📦 Данные подготовлены:');
+      addLog('Размер: ' + jsonString.length + ' символов');
+      addLog('Первые 100 символов: ' + jsonString.substring(0, 100));
+      
+      try {
+        addLog('⏳ Вызываем tg.sendData()...');
+        tg.sendData(jsonString);
+        addLog('✅ tg.sendData() выполнен БЕЗ ОШИБОК!');
+      } catch(e) {
+        addLog('❌ ОШИБКА при sendData: ' + e.message);
+      }
+    }
   </script>
+  
 </body>
 </html>
