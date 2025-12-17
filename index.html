@@ -1,137 +1,528 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>КЕНЛИТ АВТО</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
-    
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      font-family: 'Montserrat', -apple-system, sans-serif;
-      background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 50%, #0d0d0d 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    
-    .screen {
-      text-align: center;
-      max-width: 400px;
-      padding: 40px 30px;
-      background: linear-gradient(135deg, rgba(139,128,107,.15) 0%, rgba(95,87,73,.1) 100%);
-      border-radius: 24px;
-      border: 1px solid rgba(218,197,164,.2);
-      backdrop-filter: blur(10px);
-    }
-    
-    .icon { font-size: 64px; margin-bottom: 20px; }
-    
-    .title {
-      font-size: 24px;
-      font-weight: 700;
-      color: #dac5a4;
-      margin-bottom: 16px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-    
-    .text {
-      font-size: 14px;
-      color: rgba(218,197,164,.7);
-      line-height: 1.6;
-    }
-    
-    .loading {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(218,197,164,.3);
-      border-top-color: #dac5a4;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-left: 10px;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    
-    small {
-      display: block;
-      margin-top: 15px;
-      font-size: 10px;
-      opacity: 0.4;
-      word-break: break-all;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление договора</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--tg-theme-text-color, #000000);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--tg-theme-button-color, #007bff);
+        }
+
+        .seller-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .seller-btn {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .seller-btn:hover {
+            border-color: #007bff;
+            background: #f0f8ff;
+        }
+
+        .seller-btn.active {
+            border-color: #007bff;
+            background: #007bff;
+            color: white;
+        }
+
+        .price-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .price-row.total {
+            font-weight: bold;
+            font-size: 16px;
+            padding-top: 8px;
+            border-top: 2px solid #dee2e6;
+            margin-top: 8px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+            padding: 12px;
+            background: #fff3cd;
+            border-radius: 8px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .week-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .week-btn {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .week-btn:hover {
+            border-color: #007bff;
+            background: #f0f8ff;
+        }
+
+        .week-btn.active {
+            border-color: #007bff;
+            background: #007bff;
+            color: white;
+        }
+
+        .week-btn .rate {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .week-btn.active .rate {
+            color: white;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .week-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
-  <div id="content" class="screen">
-    <div class="icon">⏳</div>
-    <div class="title">Загрузка</div>
-    <div class="text">
-      Проверка доступа<span class="loading"></span>
+    <div class="container">
+        <h1>📝 Оформление договора</h1>
+        
+        <form id="contractForm">
+            <!-- Тип договора -->
+            <div class="input-group">
+                <label for="contract_type">Тип договора</label>
+                <select id="contract_type" required>
+                    <option value="">Выберите тип</option>
+                    <option value="Комиссия">Комиссия</option>
+                    <option value="Купля-продажа">Купля-продажа</option>
+                </select>
+            </div>
+
+            <!-- НОВОЕ: Выбор продавца -->
+            <div class="input-group" id="seller_type_group" style="display:none;">
+                <label for="seller_type">Кто продает?</label>
+                <div class="seller-buttons">
+                    <button type="button" class="seller-btn" data-value="company">
+                        🏢 ООО КЕНЛИТ АВТО продает
+                    </button>
+                    <button type="button" class="seller-btn" data-value="citizen">
+                        👤 Гражданин продает
+                    </button>
+                </div>
+                <input type="hidden" id="seller_type" name="seller_type" value="">
+            </div>
+
+            <!-- ФИО -->
+            <div class="input-group">
+                <label for="fio">ФИО (полностью)</label>
+                <input type="text" id="fio" placeholder="Иванов Иван Иванович" required>
+            </div>
+
+            <!-- Паспорт -->
+            <div class="input-group">
+                <label for="passport">Паспорт (серия номер)</label>
+                <input type="text" id="passport" placeholder="2003 123456" required>
+            </div>
+
+            <!-- Адрес -->
+            <div class="input-group">
+                <label for="address">Адрес регистрации</label>
+                <input type="text" id="address" placeholder="г. Москва, ул. Ленина, д. 1" required>
+            </div>
+
+            <!-- Телефон -->
+            <div class="input-group">
+                <label for="phone">Телефон</label>
+                <input type="tel" id="phone" placeholder="+7 (999) 123-45-67" required>
+            </div>
+
+            <!-- Автомобиль -->
+            <div class="input-group">
+                <label for="auto">Автомобиль (Марка Модель)</label>
+                <input type="text" id="auto" placeholder="BMW X5" required>
+            </div>
+
+            <!-- VIN -->
+            <div class="input-group">
+                <label for="vin">VIN номер</label>
+                <input type="text" id="vin" placeholder="WBAXXX1234567890" required>
+            </div>
+
+            <!-- Год выпуска -->
+            <div class="input-group">
+                <label for="year">Год выпуска</label>
+                <input type="number" id="year" placeholder="2023" min="1990" max="2025" required>
+            </div>
+
+            <!-- Цвет -->
+            <div class="input-group">
+                <label for="color">Цвет кузова</label>
+                <input type="text" id="color" placeholder="Черный" required>
+            </div>
+
+            <!-- Базовая цена -->
+            <div class="input-group">
+                <label for="base_price">Базовая цена (₽)</label>
+                <input type="number" id="base_price" placeholder="2000000" step="1000" required>
+            </div>
+
+            <!-- АКПП -->
+            <div class="input-group">
+                <label for="akpp_price">Доплата за АКПП (₽)</label>
+                <select id="akpp_price">
+                    <option value="0">Не установлена</option>
+                    <option value="100000">Вариант 1: +100 000 ₽</option>
+                    <option value="250000">Вариант 2: +250 000 ₽</option>
+                </select>
+            </div>
+
+            <!-- Новогодняя акция -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="has_discount">
+                <label for="has_discount">🎄 Новогодняя акция -26%</label>
+            </div>
+
+            <!-- Срок рассрочки -->
+            <div class="input-group">
+                <label>Срок рассрочки (недели)</label>
+                <div class="week-selector">
+                    <button type="button" class="week-btn" data-weeks="1">
+                        <div>1 неделя</div>
+                        <div class="rate">0%</div>
+                    </button>
+                    <button type="button" class="week-btn" data-weeks="2">
+                        <div>2 недели</div>
+                        <div class="rate">5%</div>
+                    </button>
+                    <button type="button" class="week-btn" data-weeks="3">
+                        <div>3 недели</div>
+                        <div class="rate">10%</div>
+                    </button>
+                    <button type="button" class="week-btn" data-weeks="4">
+                        <div>4 недели</div>
+                        <div class="rate">15%</div>
+                    </button>
+                    <button type="button" class="week-btn" data-weeks="5">
+                        <div>5 недель</div>
+                        <div class="rate">20%</div>
+                    </button>
+                    <button type="button" class="week-btn" data-weeks="6">
+                        <div>6 недель</div>
+                        <div class="rate">25%</div>
+                    </button>
+                </div>
+                <input type="hidden" id="weeks" value="">
+            </div>
+
+            <!-- Итого -->
+            <div class="price-info" id="priceInfo" style="display:none;">
+                <div class="price-row">
+                    <span>Базовая цена:</span>
+                    <span id="display_base">0 ₽</span>
+                </div>
+                <div class="price-row">
+                    <span>Доплата АКПП:</span>
+                    <span id="display_akpp">0 ₽</span>
+                </div>
+                <div class="price-row">
+                    <span>Полная стоимость:</span>
+                    <span id="display_full">0 ₽</span>
+                </div>
+                <div class="price-row" id="discount_row" style="display:none;">
+                    <span>Скидка -26%:</span>
+                    <span id="display_discount" style="color: green;">0 ₽</span>
+                </div>
+                <div class="price-row">
+                    <span>Первый взнос (50%):</span>
+                    <span id="display_down">0 ₽</span>
+                </div>
+                <div class="price-row">
+                    <span>Остаток в рассрочку:</span>
+                    <span id="display_loan">0 ₽</span>
+                </div>
+                <div class="price-row">
+                    <span>Процентная ставка:</span>
+                    <span id="display_rate">0%</span>
+                </div>
+                <div class="price-row">
+                    <span>Сумма процентов:</span>
+                    <span id="display_interest">0 ₽</span>
+                </div>
+                <div class="price-row total">
+                    <span>Итого к оплате:</span>
+                    <span id="display_total">0 ₽</span>
+                </div>
+                <div class="price-row total">
+                    <span>Еженедельный платеж:</span>
+                    <span id="display_weekly">0 ₽</span>
+                </div>
+            </div>
+        </form>
     </div>
-  </div>
-  
-  <script>
-    const tg = window.Telegram.WebApp;
-    
-    console.log('[INIT] Запуск приложения...');
-    
-    // Инициализируем Telegram WebApp
-    tg.ready();
-    tg.expand();
-    tg.setHeaderColor('#1a1a1a');
-    tg.setBackgroundColor('#1a1a1a');
-    
-    console.log('[INIT] Telegram WebApp инициализирован');
-    
-    // Ждём 500мс чтобы initData успел загрузиться
-    setTimeout(function() {
-        console.log('[AUTH] Начинаем проверку авторизации...');
-        
-        const initData = tg.initDataUnsafe;
-        
-        console.log('[AUTH] initDataUnsafe:', JSON.stringify(initData));
-        
-        // Проверяем, есть ли данные пользователя
-        if (initData && initData.user && initData.user.id) {
-            // ✅ Запущено через Telegram
-            const userId = initData.user.id;
-            const userName = initData.user.first_name || 'Пользователь';
-            
-            console.log('[AUTH] ✅ Успех! User ID:', userId, 'Name:', userName);
-            
-            // Сохраняем данные
-            sessionStorage.setItem('tg_user_id', userId);
-            sessionStorage.setItem('tg_user_name', userName);
-            
-            // Сразу перенаправляем (без промежуточного экрана)
-            console.log('[AUTH] Редирект на form.html');
-            window.location.href = 'form.html';
-            
-        } else {
-            // ❌ НЕ через Telegram - заменяем контент
-            console.log('[AUTH] ❌ Ошибка: initData пустой или нет user');
-            
-            // ЗАМЕНЯЕМ весь контент (не добавляем!)
-            document.getElementById('content').innerHTML = 
-                '<div class="icon">🔒</div>' +
-                '<div class="title">Доступ запрещён</div>' +
-                '<div class="text">' +
-                'Мини-приложение доступно только через Telegram бота.<br><br>' +
-                'Откройте бота и нажмите /start' +
-                '<small>Debug: initData = ' + JSON.stringify(initData) + '</small>' +
-                '</div>';
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
+        const rates = {1: 0, 2: 5, 3: 10, 4: 15, 5: 20, 6: 25};
+        let selectedWeeks = null;
+
+        // Показать/скрыть выбор продавца
+        document.getElementById('contract_type').addEventListener('change', function() {
+            const sellerGroup = document.getElementById('seller_type_group');
+            if (this.value === 'Купля-продажа') {
+                sellerGroup.style.display = 'block';
+            } else {
+                sellerGroup.style.display = 'none';
+                document.getElementById('seller_type').value = '';
+                document.querySelectorAll('.seller-btn').forEach(btn => btn.classList.remove('active'));
+            }
+            calculate();
+        });
+
+        // Обработка кнопок выбора продавца
+        document.querySelectorAll('.seller-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.seller-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('seller_type').value = this.dataset.value;
+            });
+        });
+
+        // Выбор недель
+        document.querySelectorAll('.week-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.week-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                selectedWeeks = parseInt(this.dataset.weeks);
+                document.getElementById('weeks').value = selectedWeeks;
+                calculate();
+            });
+        });
+
+        // Пересчет при изменении полей
+        document.getElementById('base_price').addEventListener('input', calculate);
+        document.getElementById('akpp_price').addEventListener('change', calculate);
+        document.getElementById('has_discount').addEventListener('change', calculate);
+
+        function calculate() {
+            if (!selectedWeeks) return;
+
+            const basePrice = parseFloat(document.getElementById('base_price').value) || 0;
+            const akppPrice = parseFloat(document.getElementById('akpp_price').value) || 0;
+            const hasDiscount = document.getElementById('has_discount').checked;
+
+            let fullPrice = basePrice + akppPrice;
+            let discountAmount = 0;
+
+            if (hasDiscount) {
+                discountAmount = Math.round(fullPrice * 0.26);
+                fullPrice -= discountAmount;
+            }
+
+            const downPayment = Math.round(fullPrice * 0.5);
+            const loanBody = fullPrice - downPayment;
+            const ratePercent = rates[selectedWeeks];
+            const interestSum = Math.round(loanBody * (ratePercent / 100));
+            const totalDebt = loanBody + interestSum;
+            const weeklyPayment = Math.round(totalDebt / selectedWeeks);
+
+            // Отображение
+            document.getElementById('display_base').textContent = formatPrice(basePrice);
+            document.getElementById('display_akpp').textContent = formatPrice(akppPrice);
+            document.getElementById('display_full').textContent = formatPrice(fullPrice);
+            document.getElementById('display_down').textContent = formatPrice(downPayment);
+            document.getElementById('display_loan').textContent = formatPrice(loanBody);
+            document.getElementById('display_rate').textContent = ratePercent + '%';
+            document.getElementById('display_interest').textContent = formatPrice(interestSum);
+            document.getElementById('display_total').textContent = formatPrice(totalDebt);
+            document.getElementById('display_weekly').textContent = formatPrice(weeklyPayment);
+
+            if (hasDiscount) {
+                document.getElementById('discount_row').style.display = 'flex';
+                document.getElementById('display_discount').textContent = '-' + formatPrice(discountAmount);
+            } else {
+                document.getElementById('discount_row').style.display = 'none';
+            }
+
+            document.getElementById('priceInfo').style.display = 'block';
         }
-    }, 500);
-  </script>
+
+        function formatPrice(num) {
+            return new Intl.NumberFormat('ru-RU').format(num) + ' ₽';
+        }
+
+        // Кнопка "Отправить"
+        tg.MainButton.setText('Отправить данные');
+        tg.MainButton.show();
+        tg.MainButton.onClick(function() {
+            const contractType = document.getElementById('contract_type').value;
+            const sellerType = document.getElementById('seller_type').value;
+
+            // Проверка для купли-продажи
+            if (contractType === 'Купля-продажа' && !sellerType) {
+                tg.showAlert('⚠️ Выберите, кто является продавцом!');
+                return;
+            }
+
+            if (!selectedWeeks) {
+                tg.showAlert('⚠️ Выберите срок рассрочки!');
+                return;
+            }
+
+            const basePrice = parseFloat(document.getElementById('base_price').value) || 0;
+            const akppPrice = parseFloat(document.getElementById('akpp_price').value) || 0;
+            const hasDiscount = document.getElementById('has_discount').checked;
+
+            let fullPrice = basePrice + akppPrice;
+            let discountAmount = 0;
+
+            if (hasDiscount) {
+                discountAmount = Math.round(fullPrice * 0.26);
+                fullPrice -= discountAmount;
+            }
+
+            const downPayment = Math.round(fullPrice * 0.5);
+            const loanBody = fullPrice - downPayment;
+            const ratePercent = rates[selectedWeeks];
+            const interestSum = Math.round(loanBody * (ratePercent / 100));
+            const totalDebt = loanBody + interestSum;
+            const weeklyPayment = Math.round(totalDebt / selectedWeeks);
+
+            const data = {
+                contract_type: contractType,
+                seller_type: sellerType || 'citizen',
+                fio: document.getElementById('fio').value,
+                passport: document.getElementById('passport').value,
+                address: document.getElementById('address').value,
+                phone: document.getElementById('phone').value,
+                auto: document.getElementById('auto').value,
+                vin: document.getElementById('vin').value,
+                year: document.getElementById('year').value,
+                color: document.getElementById('color').value,
+                base_price: basePrice,
+                akpp_price: akppPrice,
+                full_price: fullPrice,
+                down_payment: downPayment,
+                loan_body: loanBody,
+                rate_percent: ratePercent,
+                interest_sum: interestSum,
+                has_discount: hasDiscount,
+                discount_amount: discountAmount,
+                weeks: selectedWeeks,
+                total_debt: totalDebt,
+                weekly_payment: weeklyPayment
+            };
+
+            tg.sendData(JSON.stringify(data));
+        });
+    </script>
 </body>
 </html>
