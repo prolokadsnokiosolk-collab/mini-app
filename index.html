@@ -148,7 +148,7 @@
       border-color: rgba(255,100,100,.5);
     }
 
-    /* СКРЫТИЕ СТРЕЛОК У NUMBER INPUT */
+    /* Убираем стрелки у number */
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button {
       -webkit-appearance: none;
@@ -386,7 +386,7 @@
       </div>
     </div>
 
-    <!-- Выбор продавца для купли-продажи -->
+    <!-- Выбор продавца -->
     <div class="form-group" id="seller-block" style="display:none;">
       <label>Кто является продавцом?</label>
       <div class="button-group">
@@ -523,7 +523,6 @@
     let hasDiscount = false;
     let sellerType = null;
 
-    // выбор типа договора
     document.querySelectorAll('.contract-type-btn').forEach(btn => {
       btn.addEventListener('click', function(){
         document.querySelectorAll('.contract-type-btn').forEach(b => b.classList.remove('active'));
@@ -541,7 +540,6 @@
       });
     });
 
-    // выбор продавца
     document.querySelectorAll('.seller-choice').forEach(btn => {
       btn.addEventListener('click', function () {
         document.querySelectorAll('.seller-choice').forEach(b => b.classList.remove('active'));
@@ -550,7 +548,6 @@
       });
     });
 
-    // выбор АКПП
     document.querySelectorAll('.choice-btn').forEach(btn => {
       if (!btn.classList.contains('seller-choice')) {
         btn.addEventListener('click', function(){
@@ -564,14 +561,12 @@
       }
     });
 
-    // скидка
     document.getElementById('discount-btn').addEventListener('click', function(){
       this.classList.toggle('active');
       hasDiscount = this.classList.contains('active');
       calc();
     });
 
-    // срок рассрочки
     document.querySelectorAll('.week-btn').forEach(btn => {
       btn.addEventListener('click', function(){
         document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
@@ -585,7 +580,6 @@
       return str.replace(/[<>"'`\\/;{}()]/g, '');
     }
 
-    // валидация полей
     document.getElementById('fio').addEventListener('input', e => {
       const v = e.target.value;
       const re = /^[А-Яа-яЁё\s-]+$/;
@@ -699,8 +693,10 @@
     document.getElementById('base_price').addEventListener('input', calc);
     calc();
 
-    // РАБОЧАЯ КНОПКА ИЗ form.html
+    // ТОЧНАЯ КОПИЯ ИЗ form.html
     tg.MainButton.setText('✅ ОТПРАВИТЬ ДАННЫЕ');
+    tg.MainButton.color = '#dac5a4';
+    tg.MainButton.textColor = '#1a1a1a';
     tg.MainButton.show();
 
     tg.MainButton.onClick(function(){
