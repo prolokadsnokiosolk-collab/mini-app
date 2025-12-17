@@ -356,7 +356,7 @@
     <div class="contract-type-section">
       <div class="section-title">Тип договора</div>
       <div class="contract-types">
-        <div class="contract-type-btn active" data-type="sale">
+        <div class="contract-type-btn" data-type="sale">
           <div class="contract-type-icon">📄</div>
           <div class="contract-type-name">Купли-продажи</div>
         </div>
@@ -508,11 +508,11 @@
     }
     createSnowflakes();
 
-    let selectedType = 'sale';
+    let selectedType = null;  // ИСПРАВЛЕНО: изначально ничего не выбрано
     let selectedAkpp = 0;
     let selectedWeeks = 1;
     let hasDiscount = false;
-    let sellerType = 'citizen'; // НОВОЕ: кто продавец
+    let sellerType = null;  // ИСПРАВЛЕНО: изначально не выбран
 
     // выбор типа договора + показ блока продавца
     document.querySelectorAll('.contract-type-btn').forEach(btn => {
@@ -526,7 +526,7 @@
           sellerBlock.style.display = 'block';
         } else {
           sellerBlock.style.display = 'none';
-          sellerType = 'citizen';
+          sellerType = null;
           document.querySelectorAll('.seller-choice').forEach(b => b.classList.remove('active'));
         }
       });
@@ -698,6 +698,12 @@
       const vin  = document.getElementById('vin').value.trim().toUpperCase();
       const base = parseFloat(document.getElementById('base_price').value);
 
+      // НОВОЕ: проверка что тип договора выбран
+      if (!selectedType) {
+        tg.showAlert('❌ Выберите тип договора');
+        return;
+      }
+
       if (!fio || !/^[А-Яа-яЁё\s-]+$/.test(fio)) {
         tg.showAlert('❌ Проверьте ФИО');
         return;
@@ -727,7 +733,7 @@
 
       const data = {
         contract_type: selectedType,
-        seller_type: sellerType,   // НОВОЕ ПОЛЕ
+        seller_type: sellerType || 'citizen',
         fio,
         phone,
         auto,
