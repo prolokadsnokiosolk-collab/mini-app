@@ -14,30 +14,34 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
-            background: #1a1f2e;
-            color: #ffffff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
             padding-bottom: 100px;
         }
 
         .container {
-            max-width: 700px;
+            max-width: 500px;
             margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
         .header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            text-align: center;
             margin-bottom: 30px;
         }
 
         .header-icon {
-            font-size: 32px;
+            font-size: 48px;
+            margin-bottom: 10px;
         }
 
         h1 {
-            font-size: 28px;
+            font-size: 24px;
+            color: #1a1a1a;
             font-weight: 600;
         }
 
@@ -48,148 +52,144 @@
         label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 500;
-            font-size: 15px;
-            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
         }
 
         input, select {
             width: 100%;
-            padding: 16px;
-            border: none;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
             border-radius: 12px;
             font-size: 16px;
-            background: #2a3142;
-            color: #ffffff;
             transition: all 0.3s;
+            background: white;
         }
 
         input:focus, select:focus {
             outline: none;
-            background: #343a4d;
-            box-shadow: 0 0 0 2px #5865f2;
-        }
-
-        input::placeholder {
-            color: #6b7280;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         select {
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 16px center;
+            background-position: right 14px center;
             padding-right: 40px;
         }
 
-        /* КНОПКИ ВЫБОРА ПРОДАВЦА */
+        /* НОВЫЕ СТИЛИ ДЛЯ ВЫБОРА ПРОДАВЦА */
         .seller-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-top: 8px;
+            margin-top: 10px;
         }
 
         .seller-btn {
             padding: 16px;
-            border: 2px solid #3a4055;
+            border: 2px solid #e0e0e0;
             border-radius: 12px;
-            background: #2a3142;
+            background: white;
             cursor: pointer;
-            font-size: 15px;
-            font-weight: 500;
-            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
             transition: all 0.3s;
             text-align: center;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
             align-items: center;
         }
 
         .seller-btn:hover {
-            border-color: #5865f2;
-            background: #343a4d;
+            border-color: #667eea;
+            background: #f8f9ff;
         }
 
         .seller-btn.active {
-            border-color: #5865f2;
-            background: #5865f2;
+            border-color: #667eea;
+            background: #667eea;
             color: white;
         }
 
         .seller-btn .icon {
-            font-size: 24px;
+            font-size: 28px;
         }
 
         .seller-btn .text {
-            font-size: 14px;
+            font-size: 13px;
+            line-height: 1.3;
         }
 
         .week-selector {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 10px;
             margin-top: 10px;
         }
 
         .week-btn {
-            padding: 16px;
-            border: 2px solid #3a4055;
+            padding: 14px 10px;
+            border: 2px solid #e0e0e0;
             border-radius: 12px;
-            background: #2a3142;
+            background: white;
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
-            color: #ffffff;
         }
 
         .week-btn:hover {
-            border-color: #5865f2;
-            background: #343a4d;
+            border-color: #667eea;
+            background: #f8f9ff;
         }
 
         .week-btn.active {
-            border-color: #5865f2;
-            background: #5865f2;
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
         }
 
         .week-btn .weeks {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             margin-bottom: 4px;
         }
 
         .week-btn .rate {
-            font-size: 13px;
-            color: #9ca3af;
+            font-size: 12px;
+            color: #666;
         }
 
         .week-btn.active .rate {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .price-info {
-            background: #2a3142;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 15px;
             margin: 20px 0;
         }
 
         .price-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 15px;
+            margin-bottom: 10px;
+            font-size: 14px;
         }
 
         .price-row.total {
-            font-weight: 600;
-            font-size: 17px;
-            padding-top: 12px;
-            border-top: 2px solid #3a4055;
-            margin-top: 12px;
-            color: #5865f2;
+            font-weight: 700;
+            font-size: 18px;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            margin-top: 10px;
         }
 
         .checkbox-group {
@@ -200,8 +200,8 @@
             padding: 16px;
             background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
             border-radius: 12px;
-            color: #000000;
-            font-weight: 500;
+            color: white;
+            font-weight: 600;
         }
 
         .checkbox-group input[type="checkbox"] {
@@ -212,12 +212,15 @@
 
         .checkbox-group label {
             margin: 0;
-            font-size: 15px;
-            color: #000000;
             cursor: pointer;
+            color: white;
         }
 
         @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
             .week-selector {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -417,7 +420,7 @@
         const rates = {1: 0, 2: 5, 3: 10, 4: 15, 5: 20, 6: 25};
         let selectedWeeks = null;
 
-        // Показать/скрыть выбор продавца при выборе купли-продажи
+        // НОВОЕ: Показать/скрыть выбор продавца
         document.getElementById('contract_type').addEventListener('change', function() {
             const sellerGroup = document.getElementById('seller_type_group');
             if (this.value === 'Купля-продажа') {
@@ -427,10 +430,9 @@
                 document.getElementById('seller_type').value = '';
                 document.querySelectorAll('.seller-btn').forEach(btn => btn.classList.remove('active'));
             }
-            calculate();
         });
 
-        // Обработка кнопок выбора продавца
+        // НОВОЕ: Обработка кнопок выбора продавца
         document.querySelectorAll('.seller-btn').forEach(button => {
             button.addEventListener('click', function() {
                 document.querySelectorAll('.seller-btn').forEach(btn => btn.classList.remove('active'));
@@ -509,7 +511,7 @@
             const contractType = document.getElementById('contract_type').value;
             const sellerType = document.getElementById('seller_type').value;
 
-            // Проверка для купли-продажи
+            // НОВОЕ: Проверка для купли-продажи
             if (contractType === 'Купля-продажа' && !sellerType) {
                 tg.showAlert('⚠️ Выберите, кто является продавцом!');
                 return;
@@ -541,7 +543,7 @@
 
             const data = {
                 contract_type: contractType,
-                seller_type: sellerType || 'citizen',
+                seller_type: sellerType || 'citizen',  // НОВОЕ ПОЛЕ
                 fio: document.getElementById('fio').value,
                 passport: document.getElementById('passport').value,
                 address: document.getElementById('address').value,
