@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Оформление договора</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
@@ -13,186 +13,227 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: #1a1f2e;
+            color: #ffffff;
             padding: 20px;
-            padding-bottom: 80px;
+            padding-bottom: 100px;
         }
 
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
         }
 
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .header-icon {
+            font-size: 32px;
+        }
+
         h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-            color: var(--tg-theme-text-color, #000000);
+            font-size: 28px;
+            font-weight: 600;
         }
 
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: 500;
-            font-size: 14px;
+            font-size: 15px;
+            color: #ffffff;
         }
 
         input, select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
             font-size: 16px;
-            background: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
+            background: #2a3142;
+            color: #ffffff;
+            transition: all 0.3s;
         }
 
         input:focus, select:focus {
             outline: none;
-            border-color: var(--tg-theme-button-color, #007bff);
+            background: #343a4d;
+            box-shadow: 0 0 0 2px #5865f2;
         }
 
+        input::placeholder {
+            color: #6b7280;
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        /* КНОПКИ ВЫБОРА ПРОДАВЦА */
         .seller-buttons {
-            display: flex;
-            gap: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
             margin-top: 8px;
         }
 
         .seller-btn {
-            flex: 1;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            background: white;
+            padding: 16px;
+            border: 2px solid #3a4055;
+            border-radius: 12px;
+            background: #2a3142;
             cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
+            font-size: 15px;
             font-weight: 500;
+            color: #ffffff;
+            transition: all 0.3s;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
         }
 
         .seller-btn:hover {
-            border-color: #007bff;
-            background: #f0f8ff;
+            border-color: #5865f2;
+            background: #343a4d;
         }
 
         .seller-btn.active {
-            border-color: #007bff;
-            background: #007bff;
+            border-color: #5865f2;
+            background: #5865f2;
             color: white;
         }
 
-        .price-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
+        .seller-btn .icon {
+            font-size: 24px;
         }
 
-        .price-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
+        .seller-btn .text {
             font-size: 14px;
-        }
-
-        .price-row.total {
-            font-weight: bold;
-            font-size: 16px;
-            padding-top: 8px;
-            border-top: 2px solid #dee2e6;
-            margin-top: 8px;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 15px 0;
-            padding: 12px;
-            background: #fff3cd;
-            border-radius: 8px;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-        }
-
-        .checkbox-group label {
-            margin: 0;
-            font-size: 14px;
-        }
-
-        .error {
-            color: #dc3545;
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
         }
 
         .week-selector {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 12px;
             margin-top: 10px;
         }
 
         .week-btn {
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            background: white;
+            padding: 16px;
+            border: 2px solid #3a4055;
+            border-radius: 12px;
+            background: #2a3142;
             cursor: pointer;
-            font-size: 14px;
             transition: all 0.3s;
             text-align: center;
+            color: #ffffff;
         }
 
         .week-btn:hover {
-            border-color: #007bff;
-            background: #f0f8ff;
+            border-color: #5865f2;
+            background: #343a4d;
         }
 
         .week-btn.active {
-            border-color: #007bff;
-            background: #007bff;
-            color: white;
+            border-color: #5865f2;
+            background: #5865f2;
+        }
+
+        .week-btn .weeks {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
         }
 
         .week-btn .rate {
-            font-size: 12px;
-            color: #666;
-            margin-top: 4px;
+            font-size: 13px;
+            color: #9ca3af;
         }
 
         .week-btn.active .rate {
-            color: white;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .price-info {
+            background: #2a3142;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .price-row.total {
+            font-weight: 600;
+            font-size: 17px;
+            padding-top: 12px;
+            border-top: 2px solid #3a4055;
+            margin-top: 12px;
+            color: #5865f2;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+            padding: 16px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            border-radius: 12px;
+            color: #000000;
+            font-weight: 500;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-size: 15px;
+            color: #000000;
+            cursor: pointer;
         }
 
         @media (max-width: 480px) {
-            body {
-                padding: 15px;
-            }
-
-            h1 {
-                font-size: 20px;
-            }
-
             .week-selector {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .seller-buttons {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📝 Оформление договора</h1>
+        <div class="header">
+            <div class="header-icon">📝</div>
+            <h1>Оформление договора</h1>
+        </div>
         
         <form id="contractForm">
             <!-- Тип договора -->
@@ -205,18 +246,20 @@
                 </select>
             </div>
 
-            <!-- НОВОЕ: Выбор продавца -->
+            <!-- НОВОЕ: Выбор продавца (показывается только для купли-продажи) -->
             <div class="input-group" id="seller_type_group" style="display:none;">
-                <label for="seller_type">Кто продает?</label>
+                <label>Кто продает?</label>
                 <div class="seller-buttons">
                     <button type="button" class="seller-btn" data-value="company">
-                        🏢 ООО КЕНЛИТ АВТО продает
+                        <div class="icon">🏢</div>
+                        <div class="text">ООО КЕНЛИТ АВТО<br>продает</div>
                     </button>
                     <button type="button" class="seller-btn" data-value="citizen">
-                        👤 Гражданин продает
+                        <div class="icon">👤</div>
+                        <div class="text">Гражданин<br>продает</div>
                     </button>
                 </div>
-                <input type="hidden" id="seller_type" name="seller_type" value="">
+                <input type="hidden" id="seller_type" value="">
             </div>
 
             <!-- ФИО -->
@@ -294,27 +337,27 @@
                 <label>Срок рассрочки (недели)</label>
                 <div class="week-selector">
                     <button type="button" class="week-btn" data-weeks="1">
-                        <div>1 неделя</div>
+                        <div class="weeks">1 неделя</div>
                         <div class="rate">0%</div>
                     </button>
                     <button type="button" class="week-btn" data-weeks="2">
-                        <div>2 недели</div>
+                        <div class="weeks">2 недели</div>
                         <div class="rate">5%</div>
                     </button>
                     <button type="button" class="week-btn" data-weeks="3">
-                        <div>3 недели</div>
+                        <div class="weeks">3 недели</div>
                         <div class="rate">10%</div>
                     </button>
                     <button type="button" class="week-btn" data-weeks="4">
-                        <div>4 недели</div>
+                        <div class="weeks">4 недели</div>
                         <div class="rate">15%</div>
                     </button>
                     <button type="button" class="week-btn" data-weeks="5">
-                        <div>5 недель</div>
+                        <div class="weeks">5 недель</div>
                         <div class="rate">20%</div>
                     </button>
                     <button type="button" class="week-btn" data-weeks="6">
-                        <div>6 недель</div>
+                        <div class="weeks">6 недель</div>
                         <div class="rate">25%</div>
                     </button>
                 </div>
@@ -337,7 +380,7 @@
                 </div>
                 <div class="price-row" id="discount_row" style="display:none;">
                     <span>Скидка -26%:</span>
-                    <span id="display_discount" style="color: green;">0 ₽</span>
+                    <span id="display_discount" style="color: #10b981;">0 ₽</span>
                 </div>
                 <div class="price-row">
                     <span>Первый взнос (50%):</span>
@@ -374,7 +417,7 @@
         const rates = {1: 0, 2: 5, 3: 10, 4: 15, 5: 20, 6: 25};
         let selectedWeeks = null;
 
-        // Показать/скрыть выбор продавца
+        // Показать/скрыть выбор продавца при выборе купли-продажи
         document.getElementById('contract_type').addEventListener('change', function() {
             const sellerGroup = document.getElementById('seller_type_group');
             if (this.value === 'Купля-продажа') {
