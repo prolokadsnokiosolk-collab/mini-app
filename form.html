@@ -426,28 +426,6 @@
       color: #d46a6a;
     }
 
-    .submit-btn {
-      width: 100%;
-      padding: 20px;
-      background: linear-gradient(135deg, #8B806B 0%, #5F5749 100%);
-      color: #fff;
-      border: none;
-      border-radius: 16px;
-      font-size: 17px;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 32px;
-      box-shadow: 0 8px 24px rgba(139,128,107,.4);
-      transition: all .3s;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .submit-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 4px 12px rgba(139,128,107,.3);
-    }
-
     #debugLog {
       position: fixed;
       bottom: 0;
@@ -573,9 +551,9 @@
         </div>
       </div>
 
-      <div class="section-label">НОВОГОДНЯЯ СКИДКА 26%</div>
+      <div class="section-label">🎄 НОВОГОДНЯЯ СКИДКА</div>
       <div class="discount-box" id="discountBox">
-        <span class="discount-text">🎄 -26% НОВОГОДНЯЯ СКИДКА 🎅</span>
+        <span class="discount-text">🎄 Новогодняя скидка 26%</span>
         <span class="discount-badge">-26%</span>
       </div>
 
@@ -639,8 +617,6 @@
           <strong id="weeklyPayment">0 ₽</strong>
         </div>
       </div>
-
-      <button type="submit" class="submit-btn">📤 Отправить данные</button>
     </form>
   </div>
 
@@ -655,7 +631,7 @@
 
     log('🚀 Скрипт запущен');
 
-    // БЕЛЫЕ СНЕЖИНКИ
+    // СНЕЖИНКИ
     function createSnowflake() {
       const snowflake = document.createElement('div');
       snowflake.classList.add('snowflake');
@@ -668,10 +644,7 @@
       snowflake.style.textShadow = '0 0 5px rgba(255,255,255,0.5)';
       snowflake.style.filter = 'brightness(2)';
       document.body.appendChild(snowflake);
-
-      setTimeout(() => {
-        snowflake.remove();
-      }, 18000);
+      setTimeout(() => snowflake.remove(), 18000);
     }
 
     setInterval(createSnowflake, 800);
@@ -679,7 +652,7 @@
       setTimeout(createSnowflake, i * 300);
     }
 
-    // TELEGRAM WEBAPP - БЕЗ ПРОВЕРКИ АВТОРИЗАЦИИ
+    // TELEGRAM WEBAPP
     log('📱 Инициализация Telegram WebApp...');
     let tg = window.Telegram.WebApp;
     log('✅ Telegram: ' + (tg ? 'Найден' : 'НЕ НАЙДЕН'));
@@ -776,29 +749,28 @@
       const color = document.getElementById('color').value.trim();
 
       log('📝 ФИО: ' + fio);
-      log('📝 Авто: ' + auto);
 
       if (!fio || !passport || !address || !phone || !auto || !vin || !year || !color) {
-        log('❌ Не все поля заполнены');
-        alert('❌ Заполните все поля!');
+        log('❌ Не все поля');
+        tg.showAlert('❌ Заполните все поля!');
         return;
       }
 
       if (!/^[А-Яа-яЁё\s]+$/.test(fio)) {
-        log('❌ ФИО содержит недопустимые символы');
-        alert('❌ ФИО должно содержать только русские буквы!');
+        log('❌ ФИО неверное');
+        tg.showAlert('❌ ФИО только русские буквы!');
         return;
       }
 
       if (!/^\d{3}-\d{3}$/.test(phone)) {
-        log('❌ Неверный формат телефона');
-        alert('❌ Телефон: 333-333');
+        log('❌ Телефон неверный');
+        tg.showAlert('❌ Телефон: 333-333');
         return;
       }
 
       if (vin.length !== 17) {
-        log('❌ VIN должен быть 17 символов');
-        alert('❌ VIN должен быть 17 символов!');
+        log('❌ VIN неверный');
+        tg.showAlert('❌ VIN должен быть 17 символов!');
         return;
       }
 
@@ -819,25 +791,37 @@
       };
 
       const jsonData = JSON.stringify(data);
-      log('📦 JSON: ' + jsonData.substring(0, 100) + '...');
+      log('📦 JSON готов: ' + jsonData.length + ' байт');
       
       try {
         log('📤 tg.sendData()...');
         tg.sendData(jsonData);
-        log('✅ Данные отправлены!');
+        log('✅ Отправлено!');
       } catch(e) {
         log('❌ ОШИБКА: ' + e.message);
+        tg.showAlert('❌ Ошибка: ' + e.message);
       }
     }
 
-    document.getElementById('contractForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      log('🔵 Submit перехвачен');
+    // MAINBUTTON TELEGRAM
+    tg.MainButton.setText('ОТПРАВИТЬ ДАННЫЕ');
+    tg.MainButton.color = '#8B806B';
+    tg.MainButton.textColor = '#FFFFFF';
+    tg.MainButton.show();
+    log('✅ MainButton показана');
+
+    tg.MainButton.onClick(function() {
+      log('🔵 MainButton нажата');
       sendData();
     });
 
+    // Блокируем стандартную форму
+    document.getElementById('contractForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+    });
+
     calculate();
-    log('✅ Инициализация завершена');
+    log('✅ Готово');
   </script>
 </body>
 </html>
