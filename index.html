@@ -132,6 +132,16 @@
       font-family: 'Montserrat', sans-serif;
     }
 
+    /* НОВОЕ: убираем стрелки у number input */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
     input::placeholder {
       color: rgba(255,255,255,.2);
       font-weight: 300;
@@ -375,7 +385,7 @@
       </div>
     </div>
 
-    <!-- НОВОЕ: выбор продавца для купли-продажи -->
+    <!-- Выбор продавца для купли-продажи -->
     <div class="form-group" id="seller-block" style="display:none;">
       <label>Кто является продавцом?</label>
       <div class="button-group">
@@ -478,8 +488,6 @@
 
     tg.ready();
     tg.expand();
-    tg.setHeaderColor('#1a1a1a');
-    tg.setBackgroundColor('#1a1a1a');
 
     function getGreeting() {
       const h = new Date().getHours();
@@ -508,13 +516,13 @@
     }
     createSnowflakes();
 
-    let selectedType = null;  // ИСПРАВЛЕНО: изначально ничего не выбрано
+    let selectedType = null;
     let selectedAkpp = 0;
     let selectedWeeks = 1;
     let hasDiscount = false;
-    let sellerType = null;  // ИСПРАВЛЕНО: изначально не выбран
+    let sellerType = null;
 
-    // выбор типа договора + показ блока продавца
+    // выбор типа договора
     document.querySelectorAll('.contract-type-btn').forEach(btn => {
       btn.addEventListener('click', function(){
         document.querySelectorAll('.contract-type-btn').forEach(b => b.classList.remove('active'));
@@ -532,7 +540,7 @@
       });
     });
 
-    // НОВОЕ: выбор продавца
+    // выбор продавца
     document.querySelectorAll('.seller-choice').forEach(btn => {
       btn.addEventListener('click', function () {
         document.querySelectorAll('.seller-choice').forEach(b => b.classList.remove('active'));
@@ -541,6 +549,7 @@
       });
     });
 
+    // выбор АКПП
     document.querySelectorAll('.choice-btn').forEach(btn => {
       if (!btn.classList.contains('seller-choice')) {
         btn.addEventListener('click', function(){
@@ -554,12 +563,14 @@
       }
     });
 
+    // скидка
     document.getElementById('discount-btn').addEventListener('click', function(){
       this.classList.toggle('active');
       hasDiscount = this.classList.contains('active');
       calc();
     });
 
+    // срок рассрочки
     document.querySelectorAll('.week-btn').forEach(btn => {
       btn.addEventListener('click', function(){
         document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
@@ -573,6 +584,7 @@
       return str.replace(/[<>"'`\\/;{}()]/g, '');
     }
 
+    // валидация полей
     document.getElementById('fio').addEventListener('input', e => {
       const v = e.target.value;
       const re = /^[А-Яа-яЁё\s-]+$/;
@@ -686,9 +698,8 @@
     document.getElementById('base_price').addEventListener('input', calc);
     calc();
 
+    // ИСПРАВЛЕНО: используем MainButton (рабочая кнопка)
     tg.MainButton.setText('✅ ОТПРАВИТЬ ДАННЫЕ');
-    tg.MainButton.color = '#dac5a4';
-    tg.MainButton.textColor = '#1a1a1a';
     tg.MainButton.show();
 
     tg.MainButton.onClick(function(){
@@ -698,7 +709,6 @@
       const vin  = document.getElementById('vin').value.trim().toUpperCase();
       const base = parseFloat(document.getElementById('base_price').value);
 
-      // НОВОЕ: проверка что тип договора выбран
       if (!selectedType) {
         tg.showAlert('❌ Выберите тип договора');
         return;
@@ -725,7 +735,6 @@
         return;
       }
 
-      // НОВОЕ: для купли-продажи обязательно выбрать продавца
       if (selectedType === 'sale' && !sellerType) {
         tg.showAlert('❌ Выберите, кто является продавцом');
         return;
