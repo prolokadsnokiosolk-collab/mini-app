@@ -3,75 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ФИНАЛЬНЫЙ ТЕСТ</title>
+  <title>Форма</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #1a1a2e;
-      color: #eee;
-      padding: 20px;
-      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      font-family: Arial;
     }
-    h1 {
-      color: #0f3460;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .log {
-      background: #16213e;
-      border-left: 4px solid #0f3460;
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 5px;
-      font-size: 13px;
-      word-wrap: break-word;
-    }
-    .success { border-left-color: #4caf50; }
-    .error { border-left-color: #f44336; }
-    .warning { border-left-color: #ff9800; }
     input {
       width: 100%;
       padding: 15px;
       margin: 10px 0;
-      border: 2px solid #0f3460;
-      border-radius: 8px;
+      border: none;
+      border-radius: 10px;
       font-size: 16px;
-      background: #16213e;
-      color: #eee;
     }
-    input:focus {
-      outline: none;
-      border-color: #4caf50;
-    }
+    h2 { text-align: center; }
   </style>
 </head>
 <body>
-
-  <h1>🔬 ФИНАЛЬНЫЙ ТЕСТ</h1>
-  <div id="logs"></div>
-
-  <input type="text" id="fio" placeholder="ФИО" value="Тестов Тест Тестович">
-  <input type="text" id="phone" placeholder="Телефон" value="123-456">
+  
+  <h2>📝 Заполните форму</h2>
+  
+  <input type="text" id="fio" placeholder="ФИО">
+  <input type="text" id="phone" placeholder="Телефон (123-456)">
   <input type="number" id="price" placeholder="Цена" value="500000">
-
+  
   <script>
-    var logsDiv = document.getElementById('logs');
-
-    function log(msg, type) {
-      var div = document.createElement('div');
-      div.className = 'log ' + (type || '');
-      div.innerHTML = new Date().toLocaleTimeString() + ' - ' + msg;
-      logsDiv.appendChild(div);
-      console.log(msg);
-    }
-
-    log('1. Скрипт загружен', 'success');
-
-    if (typeof window.Telegram === 'undefined') {
-      log('❌ КРИТИЧНО: window.Telegram отсутствует!', 'error');
-    } else {
-      log('2. window.Telegram найден', 'success');
-    }
-
-    if (typeof 
+    var tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+    
+    tg.MainButton.setText('ОТПРАВИТЬ');
+    tg.MainButton.color = '#5b9bd5';
+    tg.MainButton.show();
+    
+    tg.MainButton.onClick(function(){
+      var fio = document.getElementById('fio').value.trim();
+      var phone = document.getElementById('phone').value.trim();
+      var price = document.getElementById('price').value;
+      
+      if (!fio || !phone || !price) {
+        tg.showAlert('❌ Заполните все поля!');
+        return;
+      }
+      
+      // Создаём данные
+      var data = {
+        fio: fio,
+        phone: phone,
+        price: parseFloat(price)
+      };
+      
+      // ОТПРАВЛЯЕМ ДАННЫЕ
+      tg.sendData(JSON.stringify(data));
+    });
+  </script>
+  
+</body>
+</html>
