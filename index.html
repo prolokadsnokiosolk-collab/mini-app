@@ -132,16 +132,6 @@
       font-family: 'Montserrat', sans-serif;
     }
 
-    /* НОВОЕ: убираем стрелки у number input */
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    input[type="number"] {
-      -moz-appearance: textfield;
-    }
-
     input::placeholder {
       color: rgba(255,255,255,.2);
       font-weight: 300;
@@ -156,6 +146,17 @@
 
     input.error {
       border-color: rgba(255,100,100,.5);
+    }
+
+    /* СКРЫТИЕ СТРЕЛОК У NUMBER INPUT */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+      appearance: textfield;
     }
 
     .error-message {
@@ -698,7 +699,7 @@
     document.getElementById('base_price').addEventListener('input', calc);
     calc();
 
-    // ИСПРАВЛЕНО: используем MainButton (рабочая кнопка)
+    // РАБОЧАЯ КНОПКА ИЗ form.html
     tg.MainButton.setText('✅ ОТПРАВИТЬ ДАННЫЕ');
     tg.MainButton.show();
 
