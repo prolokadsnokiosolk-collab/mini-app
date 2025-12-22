@@ -5,33 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>КЕНЛИТ АВТО</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body { 
+      background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%); 
+      color: #fff; 
+      padding: 20px; 
+      font-family: Arial; 
+    }
+    input { 
+      width: 100%; 
+      padding: 15px; 
+      margin: 10px 0; 
+      border: 1px solid #dac5a4; 
+      border-radius: 8px; 
+      background: #16213e; 
+      color: #fff; 
+      font-size: 16px; 
+    }
+    label { 
+      font-weight: bold; 
+      color: #dac5a4; 
+      margin-bottom: 5px; 
+      display: block; 
+    }
+    h1 { 
+      text-align: center; 
+      color: #dac5a4; 
+      margin-bottom: 30px; 
+    }
+  </style>
 </head>
-<body style="background:#1a1a2e;color:#fff;padding:20px;font-family:Arial;">
-  <h1 style="text-align:center;color:#dac5a4;">КЕНЛИТ АВТО</h1>
+<body>
+  <h1>🚗 КЕНЛИТ АВТО</h1>
   
-  <div style="margin:20px 0;">
-    <label>ФИО:</label>
-    <input type="text" id="fio" style="width:100%;padding:12px;margin:5px 0;border:1px solid #dac5a4;background:#16213e;color:#fff;border-radius:8px;">
+  <div>
+    <label>ФИО клиента:</label>
+    <input type="text" id="fio" placeholder="Иванов Иван Иванович">
   </div>
   
-  <div style="margin:20px 0;">
+  <div>
     <label>Телефон (333-333):</label>
-    <input type="text" id="phone" style="width:100%;padding:12px;margin:5px 0;border:1px solid #dac5a4;background:#16213e;color:#fff;border-radius:8px;" maxlength="7">
+    <input type="text" id="phone" placeholder="333-333" maxlength="7">
   </div>
   
-  <div style="margin:20px 0;">
-    <label>Авто:</label>
-    <input type="text" id="auto" style="width:100%;padding:12px;margin:5px 0;border:1px solid #dac5a4;background:#16213e;color:#fff;border-radius:8px;" value="Toyota Camry">
+  <div>
+    <label>Марка авто:</label>
+    <input type="text" id="auto" placeholder="Toyota Camry">
   </div>
   
-  <div style="margin:20px 0;">
+  <div>
     <label>VIN (17 символов):</label>
-    <input type="text" id="vin" style="width:100%;padding:12px;margin:5px 0;border:1px solid #dac5a4;background:#16213e;color:#fff;border-radius:8px;" maxlength="17">
+    <input type="text" id="vin" placeholder="WVWZZZ1KZBW123456" maxlength="17">
   </div>
   
-  <div style="margin:20px 0;">
-    <label>Цена:</label>
-    <input type="number" id="price" style="width:100%;padding:12px;margin:5px 0;border:1px solid #dac5a4;background:#16213e;color:#fff;border-radius:8px;" value="500000">
+  <div>
+    <label>Базовая цена:</label>
+    <input type="number" id="price" placeholder="500000" value="500000">
   </div>
   
   <script>
@@ -39,8 +68,9 @@
     tg.ready();
     tg.expand();
     
-    tg.MainButton.setText('✅ ОТПРАВИТЬ');
+    tg.MainButton.setText('✅ ОТПРАВИТЬ ДАННЫЕ');
     tg.MainButton.color = '#dac5a4';
+    tg.MainButton.textColor = '#1a1a1a';
     tg.MainButton.show();
     
     tg.MainButton.onClick(function(){
@@ -50,16 +80,22 @@
       var vin = document.getElementById('vin').value.trim().toUpperCase();
       var price = parseFloat(document.getElementById('price').value);
       
-      if(!fio || !phone || !auto || vin.length !== 17 || !price) {
-        tg.showAlert('❌ Заполните все поля правильно!');
+      if(!fio || !phone || !auto || vin.length !== 17 || !price || price <= 0) {
+        tg.showAlert('❌ Заполните все поля правильно!\nVIN: 17 символов\nТелефон: 333-333');
         return;
       }
       
-      // URL кодируем данные
+      if(!phone.includes('-')) {
+        tg.showAlert('❌ Телефон: формат 333-333');
+        return;
+      }
+      
+      // Формируем данные для бота
       var data = `fio=${encodeURIComponent(fio)}&phone=${encodeURIComponent(phone)}&auto=${encodeURIComponent(auto)}&vin=${vin}&price=${price}`;
       
-      // Закрываем WebApp и переходим к боту с данными
-      window.location.href = `https://t.me/${tg.initDataUnsafe.user.username || 'your_bot_username'}?start=app_${data}`;
+      // ОТПРАВЛЯЕМ В @KENLIT_bot
+      tg.showAlert('✅ Данные отправлены!');
+      window.location.href = `https://t.me/KENLIT_bot?start=app_${data}`;
     });
   </script>
 </body>
