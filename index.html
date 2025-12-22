@@ -6,96 +6,92 @@
   <title>КЕНЛИТ АВТО</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    body { 
-      background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%); 
-      color: #fff; 
-      padding: 20px; 
-      font-family: Arial; 
+    body {
+      background: #111827;
+      color: #f9fafb;
+      padding: 20px;
+      font-family: Arial, sans-serif;
     }
-    input { 
-      width: 100%; 
-      padding: 15px; 
-      margin: 10px 0; 
-      border: 1px solid #dac5a4; 
-      border-radius: 8px; 
-      background: #16213e; 
-      color: #fff; 
-      font-size: 16px; 
+    h1 {
+      text-align: center;
+      color: #facc15;
+      margin-bottom: 24px;
     }
-    label { 
-      font-weight: bold; 
-      color: #dac5a4; 
-      margin-bottom: 5px; 
-      display: block; 
+    label {
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 4px;
+      font-weight: 600;
+      color: #e5e7eb;
     }
-    h1 { 
-      text-align: center; 
-      color: #dac5a4; 
-      margin-bottom: 30px; 
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #4b5563;
+      background: #020617;
+      color: #f9fafb;
+      font-size: 15px;
+    }
+    input::placeholder {
+      color: #6b7280;
     }
   </style>
 </head>
 <body>
   <h1>🚗 КЕНЛИТ АВТО</h1>
-  
-  <div>
-    <label>ФИО клиента:</label>
-    <input type="text" id="fio" placeholder="Иванов Иван Иванович">
-  </div>
-  
-  <div>
-    <label>Телефон (333-333):</label>
-    <input type="text" id="phone" placeholder="333-333" maxlength="7">
-  </div>
-  
-  <div>
-    <label>Марка авто:</label>
-    <input type="text" id="auto" placeholder="Toyota Camry">
-  </div>
-  
-  <div>
-    <label>VIN (17 символов):</label>
-    <input type="text" id="vin" placeholder="WVWZZZ1KZBW123456" maxlength="17">
-  </div>
-  
-  <div>
-    <label>Базовая цена:</label>
-    <input type="number" id="price" placeholder="500000" value="500000">
-  </div>
-  
+
+  <label>ФИО клиента</label>
+  <input id="fio" type="text" placeholder="Иванов Иван Иванович">
+
+  <label>Телефон (333-333)</label>
+  <input id="phone" type="text" maxlength="7" placeholder="333-333">
+
+  <label>Марка авто</label>
+  <input id="auto" type="text" placeholder="Toyota Camry">
+
+  <label>VIN (17 символов)</label>
+  <input id="vin" type="text" maxlength="17" placeholder="WVWZZZ1KZBW123456">
+
+  <label>Цена</label>
+  <input id="price" type="number" value="500000">
+
   <script>
-    var tg = window.Telegram.WebApp;
+    const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
-    
+
     tg.MainButton.setText('✅ ОТПРАВИТЬ ДАННЫЕ');
-    tg.MainButton.color = '#dac5a4';
-    tg.MainButton.textColor = '#1a1a1a';
+    tg.MainButton.color = '#facc15';
+    tg.MainButton.textColor = '#111827';
     tg.MainButton.show();
-    
-    tg.MainButton.onClick(function(){
-      var fio = document.getElementById('fio').value.trim();
-      var phone = document.getElementById('phone').value.trim();
-      var auto = document.getElementById('auto').value.trim();
-      var vin = document.getElementById('vin').value.trim().toUpperCase();
-      var price = parseFloat(document.getElementById('price').value);
-      
-      if(!fio || !phone || !auto || vin.length !== 17 || !price || price <= 0) {
-        tg.showAlert('❌ Заполните все поля правильно!\nVIN: 17 символов\nТелефон: 333-333');
+
+    tg.MainButton.onClick(function () {
+      const fio   = document.getElementById('fio').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const auto  = document.getElementById('auto').value.trim();
+      const vin   = document.getElementById('vin').value.trim().toUpperCase();
+      const price = parseFloat(document.getElementById('price').value || '0');
+
+      if (!fio || !phone || !auto || vin.length !== 17 || !price || price <= 0) {
+        tg.showAlert('❌ Заполните все поля.\nТелефон: 333-333\nVIN: 17 символов.');
         return;
       }
-      
-      if(!phone.includes('-')) {
-        tg.showAlert('❌ Телефон: формат 333-333');
+      if (!phone.includes('-')) {
+        tg.showAlert('❌ Телефон в формате 333-333.');
         return;
       }
-      
-      // Формируем данные для бота
-      var data = `fio=${encodeURIComponent(fio)}&phone=${encodeURIComponent(phone)}&auto=${encodeURIComponent(auto)}&vin=${vin}&price=${price}`;
-      
-      // ОТПРАВЛЯЕМ В @KENLIT_bot
-      tg.showAlert('✅ Данные отправлены!');
-      window.location.href = `https://t.me/KENLIT_bot?start=app_${data}`;
+
+      const data =
+        'fio='   + encodeURIComponent(fio)   +
+        '&phone='+ encodeURIComponent(phone) +
+        '&auto=' + encodeURIComponent(auto)  +
+        '&vin='  + encodeURIComponent(vin)   +
+        '&price='+ price;
+
+      // ПРЯМО В ТВОЙ БОТ @KENLIT_bot
+      tg.showAlert('✅ Данные отправлены в бот.');
+      window.location.href = 'https://t.me/KENLIT_bot?start=app_' + data;
     });
   </script>
 </body>
