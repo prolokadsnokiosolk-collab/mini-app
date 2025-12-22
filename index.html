@@ -3,64 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Форма</title>
+  <title>КЕНЛИТ АВТО</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 30px;
-      font-family: Arial;
-    }
-    input {
-      width: 100%;
-      padding: 15px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-    }
-    h2 { text-align: center; }
-  </style>
 </head>
-<body>
+<body style="background:#1a1a2e;color:#fff;padding:20px;font-family:Arial;">
+  <h1 style="text-align:center;color:#dac5a4;">КЕНЛИТ АВТО</h1>
   
-  <h2>📝 Заполните форму</h2>
+  <div style="margin:20px 0;">
+    <label>ФИО:</label>
+    <input type="text" id="fio" style="width:100%;padding:12px;margin:5px 0;border:1px solid #dac5a4;background:#16213e;color:#fff;border-radius:8px;">
+  </div>
   
-  <input type="text" id="fio" placeholder="ФИО">
-  <input type="text" id="phone" placeholder="Телефон (123-456)">
-  <input type="number" id="price" placeholder="Цена" value="500000">
+  <div style="margin:20px 0;">
+    <label>Телефон (333-333):</label>
+    <input type="text" id="phone" style="width:100%;padding:12px;margin:5px 0;border:1px solid #dac5a4;background:#16213e;color:#fff;border-radius:8px;" maxlength="7">
+  </div>
+  
+  <div style="margin:20px 0;">
+    <label>Авто:</label>
+    <input type="text" id="auto" style="width:100%;padding:12px;margin:5px 0;border:1px solid #dac5a4;background:#16213e;color:#fff;border-radius:8px;" value="Toyota Camry">
+  </div>
+  
+  <div style="margin:20px 0;">
+    <label>VIN (17 символов):</label>
+    <input type="text" id="vin" style="width:100%;padding:12px;margin:5px 0;border:1px solid #dac5a4;background:#16213e;color:#fff;border-radius:8px;" maxlength="17">
+  </div>
+  
+  <div style="margin:20px 0;">
+    <label>Цена:</label>
+    <input type="number" id="price" style="width:100%;padding:12px;margin:5px 0;border:1px solid #dac5a4;background:#16213e;color:#fff;border-radius:8px;" value="500000">
+  </div>
   
   <script>
     var tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
     
-    tg.MainButton.setText('ОТПРАВИТЬ');
-    tg.MainButton.color = '#5b9bd5';
+    tg.MainButton.setText('✅ ОТПРАВИТЬ');
+    tg.MainButton.color = '#dac5a4';
     tg.MainButton.show();
     
     tg.MainButton.onClick(function(){
       var fio = document.getElementById('fio').value.trim();
       var phone = document.getElementById('phone').value.trim();
-      var price = document.getElementById('price').value;
+      var auto = document.getElementById('auto').value.trim();
+      var vin = document.getElementById('vin').value.trim().toUpperCase();
+      var price = parseFloat(document.getElementById('price').value);
       
-      if (!fio || !phone || !price) {
-        tg.showAlert('❌ Заполните все поля!');
+      if(!fio || !phone || !auto || vin.length !== 17 || !price) {
+        tg.showAlert('❌ Заполните все поля правильно!');
         return;
       }
       
-      // Создаём данные
-      var data = {
-        fio: fio,
-        phone: phone,
-        price: parseFloat(price)
-      };
+      // URL кодируем данные
+      var data = `fio=${encodeURIComponent(fio)}&phone=${encodeURIComponent(phone)}&auto=${encodeURIComponent(auto)}&vin=${vin}&price=${price}`;
       
-      // ОТПРАВЛЯЕМ ДАННЫЕ
-      tg.sendData(JSON.stringify(data));
+      // Закрываем WebApp и переходим к боту с данными
+      window.location.href = `https://t.me/${tg.initDataUnsafe.user.username || 'your_bot_username'}?start=app_${data}`;
     });
   </script>
-  
 </body>
 </html>
